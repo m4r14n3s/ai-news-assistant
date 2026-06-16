@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-06-16 09:40
+**Ostatnia aktualizacja:** 2026-06-16 10:10
 
 ---
 
@@ -16,7 +16,7 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (symlink → `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot PID | sprawdź: `pgrep -f discord-bot/bot.py` |
+| Discord bot PID | `6183` (sprawdź: `pgrep -f discord-bot/bot.py`) |
 
 ### Komendy daily
 
@@ -95,11 +95,12 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 | Data | Plik | Wynik |
 |------|------|-------|
-| 2026-06-15 | `output/2026-06-15.md` | 66 linii, AI frameworks + SAP AI + trendy |
+| 2026-06-15 | `output/2026-06-15.md` | ⛔ usunięty |
+| 2026-06-16 | `output/2026-06-16_10-05.md` | ~200 linii, pierwszy udany scan z timestampem |
 
 ## Historia sesji
 
-- **2026-06-16** — Token Discorda zresetowany (był hardcoded w `scripts/run-bot.sh`, usunięty). Repozytorium wysłane na GitHub `m4r14n3s/ai-news-assistant` z czystą historią (bez sekretów). Dodana reguła bezpieczeństwa poświadczeń w AGENTS.md.
+- **2026-06-16** — Token Discorda zresetowany (był hardcoded w `scripts/run-bot.sh`, usunięty). Repozytorium wysłane na GitHub `m4r14n3s/ai-news-assistant` z czystą historią (bez sekretów). Dodana reguła bezpieczeństwa poświadczeń w AGENTS.md. Naprawiony skrypt scanu (`--project` → `--dir`). Format notatek zmieniony na `YYYY-MM-DD_HH-MM.md` — każdy scan tworzy osobny plik.
 
 ## Znane problemy
 
