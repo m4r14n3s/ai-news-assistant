@@ -76,9 +76,11 @@ tags: [ai, agents, sap, daily]
 
 # Daily AI Scan — 2026-06-15
 
-## Agent Frameworks
+## Frameworki i narzędzia agentowe
 
-- **[Tytuł](url)** — opis z kontekstem
+- **[Nazwa frameworku](url)** — news/zmiana (1-2 zdania)
+  - **Opis:** czym jest, do czego służy, mocne strony (2-3 zdania)
+  - **Źródło:** [tytuł](url)
 
 ## SAP AI
 
