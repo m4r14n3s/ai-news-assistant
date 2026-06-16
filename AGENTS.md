@@ -32,6 +32,12 @@ Cykliczne przeszukiwanie internetu pod kątem najciekawszych informacji o AI, ze
 6. **Wiedza w plikach** — patrz mapa poniżej. Aktualizuj po każdej zmianie.
 7. **AGENTS.md to konstytucja** — nie rozrasta się. Nowa wiedza → wyspecjalizowane pliki.
 8. **Ciągłość sesji** — przed zamknięciem sesji (lub gdy kontekst się kończy) zaktualizuj `PROJECT_STATE.md`: podsumuj status, zmiany, otwarte problemy i następne kroki. Dzięki temu nowa sesja może płynnie kontynuować bez straty kontekstu. Traktuj to jak "zapis stanu gry" — im dokładniej, tym mniej pytań przy starcie.
+9. **Bezpieczeństwo poświadczeń** — wszelkie tokeny, klucze API, hasła i inne poświadczenia:
+    - Przechowuj wyłącznie w `.secrets` (gitignored).
+    - Odczytuj z tego pliku w skryptach (`source .secrets` lub `grep`).
+    - **Nigdy** nie hardcoduj w kodzie źródłowym.
+    - **Nigdy** nie przesyłaj do modelu AI ani nie umieszczaj w prompcie przekazywanym LLM-owi.
+    - Przed każdym commitem sprawdź `git diff` pod kątem przypadkowych tokenów.
 
 ## Mapa plików wiedzy
 
