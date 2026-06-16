@@ -28,7 +28,7 @@ if [ "$FORCE" = "true" ]; then
   FRESH_FLAG="Wykonaj ŚWIEŻE wyszukiwanie - nie czytaj żadnych istniejących plików w output/. "
 fi
 
-opencode run --project "$PROJECT_DIR" --agent build --model opencode/deepseek-v4-flash-free \
+opencode run --agent build --model opencode/deepseek-v4-flash-free --dir "$PROJECT_DIR" \
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, SAP AI, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem. Sekcja Źródła na końcu: każda pozycja w formacie - [Tytuł](url) — krótki opis źródła (czego dotyczy). NIE używaj tabel. Żadnych [Link] ani | # | Źródło | URL |. Zapisz jako output/${FILENAME}. Użyj websearch."
 
 echo ""
