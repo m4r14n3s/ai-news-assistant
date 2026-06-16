@@ -1,0 +1,3 @@
+# Core modules use only stdlib -- no external deps needed
+# Discord bot (optional):
+# discord.py>=2.3

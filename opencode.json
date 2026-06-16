@@ -1,0 +1,47 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "opencode": {
+      "models": {
+        "deepseek-v4-flash-free": {
+          "priority": 1
+        }
+      }
+    },
+    "openai": {
+      "envVar": "OPENAI_API_KEY",
+      "models": {
+        "gpt-4o": {
+          "priority": 2
+        },
+        "gpt-4o-mini": {
+          "priority": 3
+        }
+      }
+    },
+    "anthropic": {
+      "envVar": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-sonnet-4-20250514": {
+          "priority": 2
+        },
+        "claude-haiku-3-5": {
+          "priority": 3
+        }
+      }
+    },
+    "ollama": {
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3:8b": {
+          "priority": 4
+        },
+        "gemma4:12b": {
+          "priority": 4
+        }
+      }
+    }
+  }
+}
