@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-06-15 19:30
+**Ostatnia aktualizacja:** 2026-06-16 09:40
 
 ---
 
@@ -62,7 +62,7 @@ Wstrzymana — macOS blokuje launchd dostęp do `/Volumes/DevWork/` (dysk zewnę
 | scripts/install-services.sh | ✅ Done | Instalacja launchd |
 | Obsidian vault | ✅ Done | Symlink w iCloud vault |
 | Discord webhook | ✅ Done | Push podsumowań |
-| Discord bot token | ✅ Done | Interakcje z iPhone |
+| Discord bot token | ✅ Done (rotated 2026-06-16) | Interakcje z iPhone — stary token wyciekł do lokalnego gita, zresetowany |
 | launchd automatyzacja | ⏸️ Wstrzymana | Wymaga przeniesienia na dysk systemowy |
 
 ## Format notatki
@@ -96,6 +96,10 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 | Data | Plik | Wynik |
 |------|------|-------|
 | 2026-06-15 | `output/2026-06-15.md` | 66 linii, AI frameworks + SAP AI + trendy |
+
+## Historia sesji
+
+- **2026-06-16** — Token Discorda zresetowany (był hardcoded w `scripts/run-bot.sh`, usunięty). Repozytorium wysłane na GitHub `m4r14n3s/ai-news-assistant` z czystą historią (bez sekretów). Dodana reguła bezpieczeństwa poświadczeń w AGENTS.md.
 
 ## Znane problemy
 
