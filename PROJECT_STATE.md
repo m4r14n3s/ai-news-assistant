@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-06-16 10:10
+**Ostatnia aktualizacja:** 2026-06-17 09:30
 
 ---
 
@@ -93,12 +93,9 @@ tags: [ai, agents, sap, daily]
 
 WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, NIGDY tabela. Żadnych `[Link]`.
 
-## Historia skanów
+## Ostatni skan
 
-| Data | Plik | Wynik |
-|------|------|-------|
-| 2026-06-15 | `output/2026-06-15.md` | ⛔ usunięty |
-| 2026-06-16 | `output/2026-06-16_10-05.md` | ~200 linii, pierwszy udany scan z timestampem |
+`output/2026-06-17_09-20.md` — 96 linii, poprawny
 
 ## Historia sesji
 
