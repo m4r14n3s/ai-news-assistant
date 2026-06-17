@@ -10,3 +10,4 @@ discord-bot/.env
 vault/
 *.plist
 .secrets
+.ai-scan-session
