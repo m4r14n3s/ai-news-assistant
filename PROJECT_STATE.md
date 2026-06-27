@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-06-17 09:30
+**Ostatnia aktualizacja:** 2026-06-24 08:38
 
 ---
 
@@ -16,7 +16,7 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (symlink → `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot PID | `6183` (sprawdź: `pgrep -f discord-bot/bot.py`) |
+| Discord bot PID | `2481` (sprawdź: `pgrep -f discord-bot/bot.py`) |
 
 ### Komendy daily
 
@@ -95,11 +95,13 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 ## Ostatni skan
 
-`output/2026-06-17_09-20.md` — 96 linii, poprawny
+`output/2026-06-24_08-38.md` — ~230 linii, poprawny
 
 ## Historia sesji
 
 - **2026-06-16** — Token Discorda zresetowany (był hardcoded w `scripts/run-bot.sh`, usunięty). Repozytorium wysłane na GitHub `m4r14n3s/ai-news-assistant` z czystą historią (bez sekretów). Dodana reguła bezpieczeństwa poświadczeń w AGENTS.md. Naprawiony skrypt scanu (`--project` → `--dir`). Format notatek zmieniony na `YYYY-MM-DD_HH-MM.md` — każdy scan tworzy osobny plik.
+- **2026-06-17/18/20** — Trzy skany dzienne: frameworki (CrewAI 1.14.4, AG2 0.9.0, MCP Inspect, Claude Agent SDK billing) + SAP (AI-Native North Star, BTP ABAP + RAP, SAP Databricks). Wszystkie zapisane do `output/`.
+- **2026-06-24** — Sesja 08:38. Skan: Claude 85-min outage, Enterprise MCP connectors z Okta, CrewAI 1.14.8a2, Cursor 3.8 /automate, Codex Record & Replay, Cognition $1B/$26B, MCP stateless spec RC, LangGraph 1.2.6, SAP Sapphire 2026, SAP + Snowflake, Joule w SAP for Me. Zapisany jako `output/2026-06-24_08-38.md`.
 
 ## Znane problemy
 

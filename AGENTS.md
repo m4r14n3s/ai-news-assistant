@@ -38,6 +38,26 @@ Cykliczne przeszukiwanie internetu pod kątem najciekawszych informacji o AI, ze
     - **Nigdy** nie hardcoduj w kodzie źródłowym.
     - **Nigdy** nie przesyłaj do modelu AI ani nie umieszczaj w prompcie przekazywanym LLM-owi.
     - Przed każdym commitem sprawdź `git diff` pod kątem przypadkowych tokenów.
+10. **Anonimizacja danych LLM** — jako agent zobowiązuję się do maksymalnej anonimizacji
+    WSZYSTKICH danych wysyłanych do modelu, w tym outputu narzędzi, treści promptów,
+    zawartości plików i komunikatów użytkownika.
+
+    Zasada nadrzędna: jeśli dana personalna/identyfikująca nie jest niezbędna do wykonania
+    zadania — nie wysyłaj jej do LLM. W razie wątpliwości — zapytaj użytkownika przed
+    wysłaniem.
+
+    Konkretne techniki:
+    - `ps` → tylko `%cpu,%mem` lub `comm -c` (nigdy `ps aux`)
+    - `ls -la` → usuń kolumnę owner:group
+    - `find` / `locate` → ścieżki względne zamiast absolutnych
+    - `pwd` / `whoami` / `hostname` / `id` → placeholder zamiast rzeczywistej wartości
+    - Logi i pliki → sprawdź przed wysłaniem, czy nie zawierają sekretów, nazwisk,
+      ścieżek domowych, endpointów wewnętrznych
+    - Output narzędzi → przed przekazaniem do LLM oceń, czy zawiera dane wrażliwe;
+      jeśli tak — nie powołuj się na nie w dalszym toku lub poproś użytkownika
+      o zgodę na wysłanie
+
+    PT. 9 (Bezpieczeństwo poświadczeń) pozostaje w mocy — sekrety NIGDY nie trafiają do LLM.
 
 ## Mapa plików wiedzy
 
