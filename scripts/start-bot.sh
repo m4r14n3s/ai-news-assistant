@@ -7,4 +7,9 @@ mkdir -p output
 TOKEN=$(grep '^DISCORD_BOT_TOKEN=' .secrets | head -1 | cut -d= -f2 | tr -d '"' | tr -d "'" | xargs)
 export DISCORD_BOT_TOKEN="$TOKEN"
 
-exec python3 discord-bot/bot.py
+# Prefer venv, fallback to system python3
+if [ -f "$HOME/.venvs/ainews/bin/python3" ]; then
+  exec "$HOME/.venvs/ainews/bin/python3" discord-bot/bot.py
+else
+  exec python3 discord-bot/bot.py
+fi
