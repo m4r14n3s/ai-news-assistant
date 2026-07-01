@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-06-24 08:38
+**Ostatnia aktualizacja:** 2026-06-28 09:47
 
 ---
 
@@ -13,10 +13,11 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Zmienna | Wartość |
 |---------|---------|
 | Obsidian vault | `/Users/mariusznaw/Library/Mobile Documents/iCloud~md~obsidian/Documents/main` |
-| Obsidian folder | `AI News` (symlink → `output/`) |
+| iCloud sync | Kopiowanie post-scan do `AI News/` w vault (iPhone sync) |
+| Obsidian folder | `AI News` (katalog w iCloud vault; skan kopiuje pliki z `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot PID | `2481` (sprawdź: `pgrep -f discord-bot/bot.py`) |
+| Discord bot PID | `56506` (sprawdź: `pgrep -f discord-bot/bot.py`) |
 
 ### Komendy daily
 
@@ -93,15 +94,22 @@ tags: [ai, agents, sap, daily]
 
 WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, NIGDY tabela. Żadnych `[Link]`.
 
+### Zmiany infrastrukturalne
+
+- **2026-07-01** — Zamieniono symlink `AI News` w iCloud vault na prawdziwy katalog. `daily-scan.sh` kopiuje plik po skanie do iCloud (iPhone sync). 11 istniejących skanów przekopiowane.
+
 ## Ostatni skan
 
-`output/2026-06-24_08-38.md` — ~230 linii, poprawny
+`output/2026-06-28_09-47.md` — poprawny, 7 sekcji + źródła
 
 ## Historia sesji
 
 - **2026-06-16** — Token Discorda zresetowany (był hardcoded w `scripts/run-bot.sh`, usunięty). Repozytorium wysłane na GitHub `m4r14n3s/ai-news-assistant` z czystą historią (bez sekretów). Dodana reguła bezpieczeństwa poświadczeń w AGENTS.md. Naprawiony skrypt scanu (`--project` → `--dir`). Format notatek zmieniony na `YYYY-MM-DD_HH-MM.md` — każdy scan tworzy osobny plik.
 - **2026-06-17/18/20** — Trzy skany dzienne: frameworki (CrewAI 1.14.4, AG2 0.9.0, MCP Inspect, Claude Agent SDK billing) + SAP (AI-Native North Star, BTP ABAP + RAP, SAP Databricks). Wszystkie zapisane do `output/`.
 - **2026-06-24** — Sesja 08:38. Skan: Claude 85-min outage, Enterprise MCP connectors z Okta, CrewAI 1.14.8a2, Cursor 3.8 /automate, Codex Record & Replay, Cognition $1B/$26B, MCP stateless spec RC, LangGraph 1.2.6, SAP Sapphire 2026, SAP + Snowflake, Joule w SAP for Me. Zapisany jako `output/2026-06-24_08-38.md`.
+- **2026-06-24** — Sesja 15:44. Skan: Claude Tag (Slack), OpenAI GPT-5.5-Cyber, Daybreak, Patch the Planet, MCP stateless RC szczegóły, LangGraph 1.2.6. Zapisany jako `output/2026-06-24_15-44.md`.
+- **2026-06-27** — Sesja 10:47. Skan: OpenAI GPT-5.6 Sol preview, Broadcom Jalapeño chip, Claude for Apple Foundation Models, iOS 27 AI extensions, CrewAI 1.14.8a5, Google ADK 2.0, MCP 2026-07-28 RC 45-day window. Zapisany jako `output/2026-06-27_10-47.md`.
+- **2026-06-28** — Sesja 09:47. Skan: GPT-5.6 Sol limited by Trump admin (precedens), Broadcom $10.8B AI revenue + Jalapeño chip, Microsoft "closed gap" z Anthropic, ABAP MCP dla ADT Eclipse GA, S/4HANA Custom Code Migration Agent, CAP React/Vue.js, MCP spec 2026-07-28 RC szczegóły techniczne, Google ADK 1.0 GA w 4 językach, Microsoft Agent Framework 1.0 GA. Zapisany jako `output/2026-06-28_09-47.md`.
 
 ## Znane problemy
 

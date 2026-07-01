@@ -56,5 +56,12 @@ if [ ! -f "$SESSION_FILE" ]; then
   echo "Saved session ID to .ai-scan-session"
 fi
 
+# Copy to iCloud Obsidian vault (iPhone sync)
+ICLOUD_VAULT="/Users/mariusznaw/Library/Mobile Documents/iCloud~md~obsidian/Documents/main/AI News"
+if [ -d "$ICLOUD_VAULT" ]; then
+  cp "$OUTPUT_DIR/$FILENAME" "$ICLOUD_VAULT/"
+  echo "Copied to iCloud Obsidian vault"
+fi
+
 echo ""
 echo "=== Scan complete -> output/$FILENAME ==="
