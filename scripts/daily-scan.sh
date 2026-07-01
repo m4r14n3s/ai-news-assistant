@@ -57,7 +57,7 @@ if [ ! -f "$SESSION_FILE" ]; then
 fi
 
 # Copy to iCloud Obsidian vault (iPhone sync)
-ICLOUD_VAULT="/Users/mariusznaw/Library/Mobile Documents/iCloud~md~obsidian/Documents/main/AI News"
+ICLOUD_VAULT="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/main/AI News"
 if [ -d "$ICLOUD_VAULT" ]; then
   cp "$OUTPUT_DIR/$FILENAME" "$ICLOUD_VAULT/"
   echo "Copied to iCloud Obsidian vault"
