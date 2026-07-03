@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export PATH="$HOME/.opencode/bin:$PATH"
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUTPUT_DIR="$PROJECT_DIR/output"
 SESSION_FILE="$PROJECT_DIR/.ai-scan-session"
