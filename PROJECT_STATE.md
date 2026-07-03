@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-03 18:34
+**Ostatnia aktualizacja:** 2026-07-03 18:56
 
 ---
 
@@ -17,8 +17,9 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (katalog w iCloud vault; skan kopiuje pliki z `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot host | **Mac Mini** (`mcmna`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `56506` (na laptopie, dawny); **Mini: start przez `scripts/start-bot.sh`** |
+| Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
+| Discord bot PID | `1602` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
 
 ### Komendy daily
 
@@ -36,10 +37,10 @@ python3 scripts/python-scan.py
 ### Bot Discord
 
 - Komendy: `/scan` (nowy skan), `/last` (ostatnie podsumowanie)
-- Działa w tle (nohup + disown)
-- Nie restartuje się po restarcie — trzeba wznowić: `bash scripts/start-bot.sh`
-- **Mac Mini** (mcmna) — główny host bota. Laptop używany tylko do rozwoju kodu
-- Uśpienie Maca nie zabija bota
+- Działa w tle (nohup) na Mac Mini
+- Mini nie usypia (`sudo pmset -a sleep 0 disksleep 0`)
+- Restart bota: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+- Laptop (MacBook Air) — tylko development kodu. Bot NIGDY na laptopie
 
 ### Automatyzacja (launchd)
 
@@ -99,11 +100,12 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 ### Zmiany infrastrukturalne
 
 - **2026-07-01** — Zamieniono symlink `AI News` w iCloud vault na prawdziwy katalog. `daily-scan.sh` kopiuje plik po skanie do iCloud (iPhone sync). 11 istniejących skanów przekopiowane.
-- **2026-07-01** — Deployment bota na Mac Mini (mcmna). Repo w `~/projects/ai-news-assistant/`. Bot uruchomiony przez `setup-mini.sh` (venv + discord.py). Skany i bot idą z Mini, laptop tylko do developmentu. |
+- **2026-07-01** — Deployment bota na Mac Mini (mcmna). Repo w `~/projects/ai-news-assistant/`. Bot uruchomiony przez `setup-mini.sh` (venv + discord.py). Skany i bot idą z Mini, laptop tylko do developmentu.
+- **2026-07-03** — SSH key auth laptop → Mini. WoL przez magic packet. `daily-scan.sh`: `$HOME` zamiast hardcoded username, dodana opencode do PATH dla non-interactive shell. `start-bot.sh`: `source .secrets` z `set -a` (wszystkie zmienne, nie tylko token). Mini ustawione `sleep 0`. Świadome rozdzielenie architektur: SAP (system security) vs POC Discord bot (policy-based). Projekt pozostaje poza strukturą SAP — intencjonalnie.
 
 ## Ostatni skan
 
-`output/2026-07-03_17-38.md` — poprawny, 7 sekcji + źródła
+`output/2026-07-03_17-38.md` — poprawny, 8 sekcji + źródła
 
 ## Historia sesji
 
@@ -116,8 +118,12 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-01** — Sesja 20:29. Skan: MCP stateless spec szczegóły, LangGraph vs CrewAI adoption split, Google ADK 1.0 GA 4 języki, Microsoft Agent Framework 1.0 GA, Claude Agent SDK billing dual-bucket, GPT-5.6 Sol/Terra/Luna, OpenClaw 369K stars, Joule Studio GA, ABAP ADT dla VS Code, CAP React/Vue.js, SAP Business AI Platform. Zapisany jako `output/2026-07-01_20-29.md`.
 - **2026-07-03** — Sesja 17:38. Skan: MCP 2026-07-28 RC ostatnie 25 dni do finału + Backslash Security o 3 nowych attack surfaces, Claude Sonnet 5 launch + Fable 5/Mythos 5 przywrócone + self-hosted Claude Code gateway, Google ADK 2.0 GA z graph workflow i Task API, AI Coding Agents 2026 porównanie (Claude Code vs Codex vs Devin vs Cursor), LangGraph 1.2.7 bugfix, SAP Business AI Platform konsolidacja, SAP inwestycja w n8n $5.2B, Joule Studio 2.0 intent-based development. Zapisany jako `output/2026-07-03_17-38.md`.
 
+- **2026-07-03** — Sesja 18:56. Deployment bota na Mac Mini: SSH key auth, WoL, venv + discord.py. Naprawa `start-bot.sh` (source .secrets + venv fallback). Naprawa `daily-scan.sh` (opencode PATH, `$HOME` zamiast hardcoded). Mini `sleep 0`. /scan i /last działają z iPhone. iCloud sync przez `$HOME/Library/Mobile Documents/...`. Analiza architektury bezpieczeństwa SAP (system security) vs POC (policy-based). Zapisany jako `output/2026-07-03_17-38.md`.
+
 ## Znane problemy
 
 1. **launchd × dysk zewnętrzny** — macOS blokuje launchd dostęp do `/Volumes/DevWork/`. Rozwiązanie: przenieść na `~/Projects/`
 2. **DuckDuckGo API** — nie zwraca wyników. Python fallback wymaga alternatywnego API. Główny flow używa opencode websearch — działa.
 3. **Discord embed limit** — notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
+4. **Mini sleep → bot disconnect** — przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
+5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
