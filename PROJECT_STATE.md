@@ -102,6 +102,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-01** — Zamieniono symlink `AI News` w iCloud vault na prawdziwy katalog. `daily-scan.sh` kopiuje plik po skanie do iCloud (iPhone sync). 11 istniejących skanów przekopiowane.
 - **2026-07-01** — Deployment bota na Mac Mini (mcmna). Repo w `~/projects/ai-news-assistant/`. Bot uruchomiony przez `setup-mini.sh` (venv + discord.py). Skany i bot idą z Mini, laptop tylko do developmentu.
 - **2026-07-03** — SSH key auth laptop → Mini. WoL przez magic packet. `daily-scan.sh`: `$HOME` zamiast hardcoded username, dodana opencode do PATH dla non-interactive shell. `start-bot.sh`: `source .secrets` z `set -a` (wszystkie zmienne, nie tylko token). Mini ustawione `sleep 0`. Świadome rozdzielenie architektur: SAP (system security) vs POC Discord bot (policy-based). Projekt pozostaje poza strukturą SAP — intencjonalnie.
+- **2026-07-05** — WiFi watchdog: cron + `scripts/wifi-watchdog.sh` na Mini. Rozwiązuje cykliczne rozłączanie WiFi (en1) które zabijało sesję Gateway bota co ~3min. Watchdog pinguje router co minutę, restartuje WiFi i bota w razie problemu.
 
 ## Ostatni skan
 
@@ -127,3 +128,4 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 3. **Discord embed limit** — notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
 4. **Mini sleep → bot disconnect** — przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
 5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+6. **WiFi Mini niestabilne** — en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
