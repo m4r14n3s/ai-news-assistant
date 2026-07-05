@@ -38,7 +38,7 @@ async def scan(interaction: discord.Interaction):
             ["bash", SCAN_SCRIPT, "--force"],
             capture_output=True,
             text=True,
-            timeout=180,
+            timeout=300,
         )
         embed = discord.Embed(
             title="✅ AI News Scan",
