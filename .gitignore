@@ -11,3 +11,5 @@ vault/
 *.plist
 .secrets
 .ai-scan-session
+*.log
+nohup.out

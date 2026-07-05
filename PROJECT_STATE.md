@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-03 18:56
+**Ostatnia aktualizacja:** 2026-07-05 09:56
 
 ---
 
@@ -118,8 +118,9 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-06-28** — Sesja 09:47. Skan: GPT-5.6 Sol limited by Trump admin (precedens), Broadcom $10.8B AI revenue + Jalapeño chip, Microsoft "closed gap" z Anthropic, ABAP MCP dla ADT Eclipse GA, S/4HANA Custom Code Migration Agent, CAP React/Vue.js, MCP spec 2026-07-28 RC szczegóły techniczne, Google ADK 1.0 GA w 4 językach, Microsoft Agent Framework 1.0 GA. Zapisany jako `output/2026-06-28_09-47.md`.
 - **2026-07-01** — Sesja 20:29. Skan: MCP stateless spec szczegóły, LangGraph vs CrewAI adoption split, Google ADK 1.0 GA 4 języki, Microsoft Agent Framework 1.0 GA, Claude Agent SDK billing dual-bucket, GPT-5.6 Sol/Terra/Luna, OpenClaw 369K stars, Joule Studio GA, ABAP ADT dla VS Code, CAP React/Vue.js, SAP Business AI Platform. Zapisany jako `output/2026-07-01_20-29.md`.
 - **2026-07-03** — Sesja 17:38. Skan: MCP 2026-07-28 RC ostatnie 25 dni do finału + Backslash Security o 3 nowych attack surfaces, Claude Sonnet 5 launch + Fable 5/Mythos 5 przywrócone + self-hosted Claude Code gateway, Google ADK 2.0 GA z graph workflow i Task API, AI Coding Agents 2026 porównanie (Claude Code vs Codex vs Devin vs Cursor), LangGraph 1.2.7 bugfix, SAP Business AI Platform konsolidacja, SAP inwestycja w n8n $5.2B, Joule Studio 2.0 intent-based development. Zapisany jako `output/2026-07-03_17-38.md`.
-
 - **2026-07-03** — Sesja 18:56. Deployment bota na Mac Mini: SSH key auth, WoL, venv + discord.py. Naprawa `start-bot.sh` (source .secrets + venv fallback). Naprawa `daily-scan.sh` (opencode PATH, `$HOME` zamiast hardcoded). Mini `sleep 0`. /scan i /last działają z iPhone. iCloud sync przez `$HOME/Library/Mobile Documents/...`. Analiza architektury bezpieczeństwa SAP (system security) vs POC (policy-based). Zapisany jako `output/2026-07-03_17-38.md`.
+
+- **2026-07-05** — Sesja 09:56. WiFi watchdog (cron + `wifi-watchdog.sh`) na Mini rozwiązuje cykliczne rozłączanie en1. `.gitignore`: dodano `*.log`, `nohup.out`. Ostatni commit: `a807e76`.
 
 ## Znane problemy
 
