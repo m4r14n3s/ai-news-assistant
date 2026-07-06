@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-05 09:56
+**Ostatnia aktualizacja:** 2026-07-06 18:27
 
 ---
 
@@ -17,9 +17,9 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (katalog w iCloud vault; skan kopiuje pliki z `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `1602` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
-| SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
+| Discord bot host | **Mac Mini** (`mna@192.168.1.140`, `~/projects/ai-news-assistant`) |
+| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| SSH | `ssh mna@192.168.1.140` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
 
 ### Komendy daily
 
@@ -39,7 +39,7 @@ python3 scripts/python-scan.py
 - Komendy: `/scan` (nowy skan), `/last` (ostatnie podsumowanie)
 - Działa w tle (nohup) na Mac Mini
 - Mini nie usypia (`sudo pmset -a sleep 0 disksleep 0`)
-- Restart bota: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+- Restart bota: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 - Laptop (MacBook Air) — tylko development kodu. Bot NIGDY na laptopie
 
 ### Automatyzacja (launchd)
@@ -121,6 +121,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-03** — Sesja 18:56. Deployment bota na Mac Mini: SSH key auth, WoL, venv + discord.py. Naprawa `start-bot.sh` (source .secrets + venv fallback). Naprawa `daily-scan.sh` (opencode PATH, `$HOME` zamiast hardcoded). Mini `sleep 0`. /scan i /last działają z iPhone. iCloud sync przez `$HOME/Library/Mobile Documents/...`. Analiza architektury bezpieczeństwa SAP (system security) vs POC (policy-based). Zapisany jako `output/2026-07-03_17-38.md`.
 
 - **2026-07-05** — Sesja 09:56. WiFi watchdog (cron + `wifi-watchdog.sh`) na Mini rozwiązuje cykliczne rozłączanie en1. `.gitignore`: dodano `*.log`, `nohup.out`. Ostatni commit: `a807e76`.
+- **2026-07-06** — Sesja 18:27. Mini zmieniło IP z `192.168.1.139` na `192.168.1.140` po hard resecie. Bot zrestartowany PID 1564.
 
 ## Znane problemy
 
@@ -128,5 +129,5 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 2. **DuckDuckGo API** — nie zwraca wyników. Python fallback wymaga alternatywnego API. Główny flow używa opencode websearch — działa.
 3. **Discord embed limit** — notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
 4. **Mini sleep → bot disconnect** — przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
-5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 6. **WiFi Mini niestabilne** — en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
