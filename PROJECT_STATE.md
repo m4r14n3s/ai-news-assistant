@@ -17,9 +17,10 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (katalog w iCloud vault; skan kopiuje pliki z `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot host | **Mac Mini** (`mna@192.168.1.140`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
-| SSH | `ssh mna@192.168.1.140` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
+| Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
+| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
+| DHCP reservation | Router ASUS: MAC `2a:c9:d6:98:5e:70` → IP `192.168.1.139` (stałe) |
 
 ### Komendy daily
 
@@ -39,7 +40,7 @@ python3 scripts/python-scan.py
 - Komendy: `/scan` (nowy skan), `/last` (ostatnie podsumowanie)
 - Działa w tle (nohup) na Mac Mini
 - Mini nie usypia (`sudo pmset -a sleep 0 disksleep 0`)
-- Restart bota: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+- Restart bota: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 - Laptop (MacBook Air) — tylko development kodu. Bot NIGDY na laptopie
 
 ### Automatyzacja (launchd)
@@ -104,6 +105,8 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-03** — SSH key auth laptop → Mini. WoL przez magic packet. `daily-scan.sh`: `$HOME` zamiast hardcoded username, dodana opencode do PATH dla non-interactive shell. `start-bot.sh`: `source .secrets` z `set -a` (wszystkie zmienne, nie tylko token). Mini ustawione `sleep 0`. Świadome rozdzielenie architektur: SAP (system security) vs POC Discord bot (policy-based). Projekt pozostaje poza strukturą SAP — intencjonalnie.
 - **2026-07-05** — WiFi watchdog: cron + `scripts/wifi-watchdog.sh` na Mini. Rozwiązuje cykliczne rozłączanie WiFi (en1) które zabijało sesję Gateway bota co ~3min. Watchdog pinguje router co minutę, restartuje WiFi i bota w razie problemu.
 
+- **2026-07-08** — Prompt `daily-scan.sh` zmieniony na biznesowy styl opisów (czysta polszczyzna, nazwy produktów po angielsku, brak mieszania języków, focus na wartość biznesową). DHCP reservation na routerze ASUS. Stałe IP dla Mini: `192.168.1.139`.
+
 ## Ostatni skan
 
 `output/2026-07-03_17-38.md` — poprawny, 8 sekcji + źródła
@@ -122,6 +125,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 - **2026-07-05** — Sesja 09:56. WiFi watchdog (cron + `wifi-watchdog.sh`) na Mini rozwiązuje cykliczne rozłączanie en1. `.gitignore`: dodano `*.log`, `nohup.out`. Ostatni commit: `a807e76`.
 - **2026-07-06** — Sesja 18:27. Mini zmieniło IP z `192.168.1.139` na `192.168.1.140` po hard resecie. Bot zrestartowany PID 1564.
+- **2026-07-08** — Sesja 19:12. DHCP reservation na routerze ASUS: MAC `2a:c9:d6:98:5e:70` → stałe IP `192.168.1.139`. Prompt `daily-scan.sh`: styl biznesowy zamiast technicznego. Watchdog: tylko restart WiFi, nie zabija bota. Scan timeout: 300s.
 
 ## Znane problemy
 
@@ -129,5 +133,5 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 2. **DuckDuckGo API** — nie zwraca wyników. Python fallback wymaga alternatywnego API. Główny flow używa opencode websearch — działa.
 3. **Discord embed limit** — notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
 4. **Mini sleep → bot disconnect** — przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
-5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.140 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 6. **WiFi Mini niestabilne** — en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
