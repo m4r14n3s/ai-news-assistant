@@ -1,6 +1,6 @@
 # PROJECT STATE — AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-06 18:27
+**Ostatnia aktualizacja:** 2026-07-08 19:14
 
 ---
 
@@ -109,7 +109,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 ## Ostatni skan
 
-`output/2026-07-03_17-38.md` — poprawny, 8 sekcji + źródła
+`output/2026-07-08_19-13.md` — poprawny, styl biznesowy
 
 ## Historia sesji
 
