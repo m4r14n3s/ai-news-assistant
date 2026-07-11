@@ -17,10 +17,10 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Obsidian folder | `AI News` (katalog w iCloud vault; skan kopiuje pliki z `output/`) |
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
-| Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
-| SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `2a:c9:d6:98:5e:70` |
-| DHCP reservation | Router ASUS: MAC `2a:c9:d6:98:5e:70` → IP `192.168.1.139` (stałe) |
+| Discord bot host | **Mac Mini** (`mna@192.168.1.184`, `~/projects/ai-news-assistant`) |
+| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.184 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| SSH | `ssh mna@192.168.1.184` (key auth, bez hasła); WoL: magic packet na MAC `6a:ce:d1:22:20:7d` |
+| DHCP reservation | Router ASUS: MAC `2a:c9:d6:98:5e:70` → IP `192.168.1.139` (NIE DZIAŁA — Mini ma Private Wi-Fi Address, aktualny MAC `6a:ce:d1:22:20:7d`, IP `.184`)
 
 ### Komendy daily
 
@@ -40,7 +40,7 @@ python3 scripts/python-scan.py
 - Komendy: `/scan` (nowy skan), `/last` (ostatnie podsumowanie)
 - Działa w tle (nohup) na Mac Mini
 - Mini nie usypia (`sudo pmset -a sleep 0 disksleep 0`)
-- Restart bota: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+- Restart bota: `ssh mna@192.168.1.184 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 - Laptop (MacBook Air) — tylko development kodu. Bot NIGDY na laptopie
 
 ### Automatyzacja (launchd)
@@ -133,5 +133,6 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 2. **DuckDuckGo API** — nie zwraca wyników. Python fallback wymaga alternatywnego API. Główny flow używa opencode websearch — działa.
 3. **Discord embed limit** — notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
 4. **Mini sleep → bot disconnect** — przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
-5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+5. **Bot restart po resecie Mini** — brak launchd. Ręcznie: `ssh mna@192.168.1.184 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 6. **WiFi Mini niestabilne** — en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
+7. **Private Wi-Fi Address** — macOS zmienia MAC WiFi, co psuje DHCP reservation. Rozwiązanie: wyłączyć w ustawieniach WiFi (System Settings → WiFi → szczegóły sieci → Private Wi-Fi Address → Off) lub podłączyć Ethernet.
