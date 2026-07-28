@@ -14,7 +14,7 @@ if [ -f "$PROJECT_DIR/.secrets" ]; then
   set -a; source "$PROJECT_DIR/.secrets"; set +a
 fi
 
-echo "=== AI News Assistant — Daily Scan ==="
+echo "=== AI News Assistant - Daily Scan ==="
 echo "Date: $DATE"
 echo "Project: $PROJECT_DIR"
 echo ""
@@ -43,13 +43,20 @@ opencode run "${SESSION_ARGS[@]}" --agent build --model opencode/deepseek-v4-fla
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
-- **[Nazwa frameworku](url)** — news/zmiana (1-2 zdania po polsku, czysty język biznesowy)
+- **[Nazwa frameworku](url)** - news/zmiana (1-2 zdania po polsku, czysty język biznesowy)
   - **Opis:** czym jest, do czego służy, dla kogo, wartość biznesowa (2-3 zdania po polsku). Nazwy produktów/usług po angielsku (Joule, MCP, ABAP, LangGraph itp.), ale całe zdanie po polsku. BEZ mieszania języków w jednym zdaniu. Zamiast "announce: wchodzi w erę z GA" → "SAP ogłosił ogólną dostępność". Zamiast bug fixów technicznych → "naprawiono błąd synchronizacji stanu". Skup się na "co to umożliwia" a nie "jak to zrobiono".
   - **Źródło:** [tytuł](url)
 
-Sekcja SAP AI opieraj wyłącznie na oficjalnych źródłach SAP: community.sap.com, news.sap.com, sap.com, pages.community.sap.com, SAP Discovery Center, SAP BTP blogi, oficjalne dokumentacje SAP AI Core / AI Launchpad / Generative AI Hub. Żadnych third-party blogów czy portali w sekcji SAP AI. Opisy w czystej polszczyźnie biznesowej — nazwy produktów SAP po angielsku, reszta po polsku.
+Sekcja SAP AI opieraj wyłącznie na oficjalnych źródłach SAP: community.sap.com, news.sap.com, sap.com, pages.community.sap.com, SAP Discovery Center, SAP BTP blogi, oficjalne dokumentacje SAP AI Core / AI Launchpad / Generative AI Hub. Żadnych third-party blogów czy portali w sekcji SAP AI. Opisy w czystej polszczyźnie biznesowej - nazwy produktów SAP po angielsku, reszta po polsku.
 
-Sekcja Źródła na końcu: każda pozycja w formacie - [Tytuł](url) — krótki opis źródła (czego dotyczy). NIE używaj tabel. Żadnych [Link] ani | # | Źródło | URL |. Zapisz jako output/${FILENAME}. Użyj websearch."
+Sekcja Źródła na końcu: każda pozycja w formacie - [Tytuł](url) - krótki opis źródła (czego dotyczy). NIE używaj tabel. Żadnych [Link] ani | # | Źródło | URL |. Zapisz jako output/${FILENAME}. Użyj websearch.
+
+Dodatkowe źródła do sprawdzenia (oprócz websearch):
+- Twitter/X: @OpenAI, @AnthropicAI, @GoogleDeepMind, @kaborojevic, @sama
+- GitHub Trending dla "AI agents", "MCP", "agentic AI"
+- Hacker News (news.ycombinator.com) dla AI-related postów
+- arXiv (arxiv.org/list/cs.AI/recent) dla nowych paperów
+- Oficjalne blogi: OpenAI, Anthropic, Google DeepMind, Meta AI"
 
 # Save session ID after first run for future resumes
 if [ ! -f "$SESSION_FILE" ]; then
