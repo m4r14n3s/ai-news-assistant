@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-11 23:00
+**Ostatnia aktualizacja:** 2026-07-18 09:21
 
 ---
 
@@ -18,7 +18,7 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
 | Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `1564` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| Discord bot PID | `25363` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
 | SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `14:98:77:70:6c:6e` |
 | DHCP reservation | Router ASUS: MAC `14:98:77:70:6c:6e` → IP `192.168.1.139` (fizyczny MAC, Private WiFi Address OFF) |
 
@@ -107,10 +107,11 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 - **2026-07-08** - Prompt `daily-scan.sh` zmieniony na biznesowy styl opisów (czysta polszczyzna, nazwy produktów po angielsku, brak mieszania języków, focus na wartość biznesową). DHCP reservation na routerze ASUS. Stałe IP dla Mini: `192.168.1.139`.
 - **2026-07-11** - Sesja 23:00. Private Wi-Fi Address wyłączony (MAC `14:98:77:70:6c:6e`). DHCP reservation działa (`.139`). Bot PID 1564, uptime 5 dni. Ostatni commit: `7a54f48`.
+- **2026-07-18** - Dodane źródła do `daily-scan.sh`: Twitter/X, GitHub Trending, HN, arXiv, blogi OpenAI/Anthropic/Google. Bot zrestartowany PID 25363 po zdechnięciu.
 
 ## Ostatni skan
 
-`output/2026-07-08_19-13.md` - poprawny, styl biznesowy
+`output/2026-07-08_19-13.md` - poprawny, styl biznesowy (możliwy nowszy, bot był restartowany)
 
 ## Historia sesji
 
@@ -127,6 +128,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-05** - Sesja 09:56. WiFi watchdog (cron + `wifi-watchdog.sh`) na Mini rozwiązuje cykliczne rozłączanie en1. `.gitignore`: dodano `*.log`, `nohup.out`. Ostatni commit: `a807e76`.
 - **2026-07-06** - Sesja 18:27. Mini zmieniło IP z `192.168.1.139` na `192.168.1.140` po hard resecie. Bot zrestartowany PID 1564.
 - **2026-07-08** - Sesja 19:12. DHCP reservation na routerze ASUS: MAC `2a:c9:d6:98:5e:70` → stałe IP `192.168.1.139`. Prompt `daily-scan.sh`: styl biznesowy zamiast technicznego. Watchdog: tylko restart WiFi, nie zabija bota. Scan timeout: 300s.
+- **2026-07-18** - Sesja 09:21. Dodane źródła do `daily-scan.sh`: Twitter/X (OpenAI, Anthropic, Google), GitHub Trending, HN, arXiv, blogi producentów. Bot padł, zrestartowany PID 25363. Synchronizacja plików po sesji.
 
 ## Znane problemy
 
