@@ -1,4 +1,4 @@
-# KNOWLEDGE — Wiedza domenowa AI + SAP
+# KNOWLEDGE - Wiedza domenowa AI + SAP
 
 ## AI Agent Frameworks
 
@@ -13,12 +13,12 @@
 
 ## SAP AI Stack
 
-- **SAP AI Core** — zarządzanie modelami ML w BTP
-- **Generative AI Hub** — hosting LLM (GPT, Llama, Claude, Gemini)
-- **Joule** — wbudowany asystent AI SAP
-- **SAP BTP Orchestration** — prompt templates + grounding + tools
-- **Document Information Extraction** — OCR + strukturyzacja
-- **AI Business Services** — rozpoznawanie encji, tłumaczenia
+- **SAP AI Core** - zarządzanie modelami ML w BTP
+- **Generative AI Hub** - hosting LLM (GPT, Llama, Claude, Gemini)
+- **Joule** - wbudowany asystent AI SAP
+- **SAP BTP Orchestration** - prompt templates + grounding + tools
+- **Document Information Extraction** - OCR + strukturyzacja
+- **AI Business Services** - rozpoznawanie encji, tłumaczenia
 
 ## Źródła AI News
 
@@ -37,9 +37,9 @@
 
 ## Tagi do klasyfikacji
 
-- `ai-agents` — frameworki i narzędzia agentowe
-- `sap-ai` — AI w ekosystemie SAP
-- `llm` — modele, trenowanie, fine-tuning
-- `tools` — MCP, function calling, tool use
-- `research` — papiery naukowe, przełomy
-- `enterprise` — wdrożenia enterprise, case studies
+- `ai-agents` - frameworki i narzędzia agentowe
+- `sap-ai` - AI w ekosystemie SAP
+- `llm` - modele, trenowanie, fine-tuning
+- `tools` - MCP, function calling, tool use
+- `research` - papiery naukowe, przełomy
+- `enterprise` - wdrożenia enterprise, case studies

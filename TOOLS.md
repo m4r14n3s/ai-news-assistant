@@ -1,4 +1,4 @@
-# TOOLS — Rejestr narzędzi
+# TOOLS - Rejestr narzędzi
 
 | Narzędzie | Opis | Lokalizacja |
 |-----------|------|-------------|

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# WiFi watchdog for Mac Mini — restart WiFi only if ping fails
+# WiFi watchdog for Mac Mini - restart WiFi only if ping fails
 set -euo pipefail
 
 ROUTER="192.168.1.50"
@@ -19,9 +19,9 @@ fi
 
 ping -c1 -W2 "$ROUTER" >/dev/null 2>&1 && exit 0
 
-echo "[$(date)] WiFi down — restarting WiFi only (bot reconnect auto)..." >> "$LOG"
+echo "[$(date)] WiFi down - restarting WiFi only (bot reconnect auto)..." >> "$LOG"
 
-# Restart WiFi (don't touch bot — discord.py auto-reconnects)
+# Restart WiFi (don't touch bot - discord.py auto-reconnects)
 networksetup -setairportpower "$WIFI_INTERFACE" off
 sleep 3
 networksetup -setairportpower "$WIFI_INTERFACE" on

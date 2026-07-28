@@ -1,10 +1,10 @@
-# DECISIONS — Architectural Decision Records
+# DECISIONS - Architectural Decision Records
 
 ## ADR-0001: Multi-model orchestration
 
 **Status:** Accepted  
 **Date:** 2026-06-15  
-**Context:** Potrzeba optymalizacji kosztów vs jakości — tanie modele do search, drogie do analizy.  
+**Context:** Potrzeba optymalizacji kosztów vs jakości - tanie modele do search, drogie do analizy.  
 **Decision:** opencode multi-provider config. Deepseek (free) do web search i wstępnego parsowania. Claude/GPT do curation, summarization.  
 **Consequences:** Większa złożoność konfiguracji, ale optymalny balans cost/quality.
 

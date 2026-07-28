@@ -1,4 +1,4 @@
-# CAPABILITIES — Możliwości systemu
+# CAPABILITIES - Możliwości systemu
 
 ## Architektura
 

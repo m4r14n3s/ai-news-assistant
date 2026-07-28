@@ -150,7 +150,7 @@ async def on_ready():
     await tree.sync()
     for guild in client.guilds:
         await tree.sync(guild=guild)
-    print(f"Bot online: {client.user} — synced to {len(client.guilds)} guild(s)")
+    print(f"Bot online: {client.user} - synced to {len(client.guilds)} guild(s)")
 
 
 def main():

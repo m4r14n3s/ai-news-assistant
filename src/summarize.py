@@ -46,7 +46,7 @@ def generate_summary(
     lines.append("tags: [ai, agents, sap, daily]")
     lines.append("---")
     lines.append("")
-    lines.append(f"# AI News — {scan_date.isoformat()}")
+    lines.append(f"# AI News - {scan_date.isoformat()}")
     lines.append("")
 
     for i, (cat_key, cat_title) in enumerate(CATEGORIES.items()):

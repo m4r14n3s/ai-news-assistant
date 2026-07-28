@@ -29,46 +29,6 @@
           "priority": 3
         }
       }
-    },
-    "ollama": {
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
-      },
-      "models": {
-        "qwen3:8b": {
-          "priority": 4
-        },
-        "gemma4:12b": {
-          "priority": 4
-        },
-        "deepseek-r1:8b": {
-          "priority": 4
-        },
-        "qwen2.5:latest": {
-          "priority": 4
-        },
-        "qwen2.5-coder:7b": {
-          "priority": 4
-        },
-        "llama3:latest": {
-          "priority": 4
-        },
-        "llama3.1:latest": {
-          "priority": 4
-        },
-        "gemma3:latest": {
-          "priority": 4
-        },
-        "gpt-oss:20b": {
-          "priority": 4
-        },
-        "llava:7b": {
-          "priority": 4
-        },
-        "minimax-m3:cloud": {
-          "priority": 4
-        }
-      }
     }
   }
 }
