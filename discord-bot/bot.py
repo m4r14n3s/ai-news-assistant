@@ -55,6 +55,35 @@ async def scan(interaction: discord.Interaction):
         await interaction.followup.send(f"❌ Błąd: {e}")
 
 
+@tree.command(name="fresh", description="Uruchom skan na NOWEJ sesji (bez starego kontekstu)")
+async def fresh(interaction: discord.Interaction):
+    if not _is_allowed(interaction.user.id):
+        await interaction.response.send_message("Brak uprawnień.", ephemeral=True)
+        return
+    await interaction.response.defer()
+    try:
+        result = subprocess.run(
+            ["bash", SCAN_SCRIPT, "--force"],
+            capture_output=True,
+            text=True,
+            timeout=300,
+            env={**__import__("os").environ, "FRESH_SESSION": "true"},
+        )
+        embed = discord.Embed(
+            title="✅ Fresh AI News Scan",
+            description="Skan na nowej sesji zakończony. Użyj `/last` aby zobaczyć podsumowanie.",
+            color=0xFFA500,
+        )
+        outfile = result.stdout.strip().split("/")[-1] if result.stdout else ""
+        if outfile:
+            embed.add_field(name="Plik", value=f"`{outfile}`", inline=True)
+        await interaction.followup.send(embed=embed)
+    except subprocess.TimeoutExpired:
+        await interaction.followup.send("⏱ Skan przekroczył limit czasu.")
+    except Exception as e:
+        await interaction.followup.send(f"❌ Błąd: {e}")
+
+
 @tree.command(name="last", description="Pokaż ostatnie podsumowanie")
 async def last(interaction: discord.Interaction):
     if not _is_allowed(interaction.user.id):

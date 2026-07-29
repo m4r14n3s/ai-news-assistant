@@ -29,9 +29,9 @@ if [ "$FORCE" = "true" ]; then
   FRESH_FLAG="Wykonaj ŚWIEŻE wyszukiwanie - nie czytaj żadnych istniejących plików w output/. "
 fi
 
-# Force mode always creates a new session (stale context = bad agent behavior)
-if [ "$FORCE" = "true" ] && [ -f "$SESSION_FILE" ]; then
-  echo "Force mode: removing stale session $(cat "$SESSION_FILE")"
+# Fresh session mode: delete session file to force new session
+if [ "${FRESH_SESSION:-false}" = "true" ] && [ -f "$SESSION_FILE" ]; then
+  echo "Fresh session mode: removing stale session $(cat "$SESSION_FILE")"
   rm -f "$SESSION_FILE"
 fi
 
