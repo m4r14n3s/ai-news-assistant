@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-07-18 09:21
+**Ostatnia aktualizacja:** 2026-07-29 18:56
 
 ---
 
@@ -18,7 +18,7 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
 | Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `25363` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| Discord bot PID | `51858` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
 | SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `14:98:77:70:6c:6e` |
 | DHCP reservation | Router ASUS: MAC `14:98:77:70:6c:6e` → IP `192.168.1.139` (fizyczny MAC, Private WiFi Address OFF) |
 
@@ -129,6 +129,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-06** - Sesja 18:27. Mini zmieniło IP z `192.168.1.139` na `192.168.1.140` po hard resecie. Bot zrestartowany PID 1564.
 - **2026-07-08** - Sesja 19:12. DHCP reservation na routerze ASUS: MAC `2a:c9:d6:98:5e:70` → stałe IP `192.168.1.139`. Prompt `daily-scan.sh`: styl biznesowy zamiast technicznego. Watchdog: tylko restart WiFi, nie zabija bota. Scan timeout: 300s.
 - **2026-07-18** - Sesja 09:21. Dodane źródła do `daily-scan.sh`: Twitter/X (OpenAI, Anthropic, Google), GitHub Trending, HN, arXiv, blogi producentów. Bot padł, zrestartowany PID 25363. Synchronizacja plików po sesji.
+- **2026-07-29** - Sesja 18:56. Reguła 0 w AGENTS.md (NIGDY nie usuwać bez zgody). `/fresh` (nowa sesja), `/scan` (persistent). `/fresh` timeout 600s. `/last` pomija pliki <100B. Frontmatter wymuszone tags. Private WiFi Address OFF na stałe. Bot PID 51858.
 
 ## Znane problemy
 
