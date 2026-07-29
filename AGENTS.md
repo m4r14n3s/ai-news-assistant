@@ -7,6 +7,16 @@
 
 ---
 
+## ZASADA NADRZĘDNA — NIEZBYWALNA
+
+**0. NIGDY nie usuwaj, nie zmieniaj nazwy, nie przenoś i nie modyfikuj żadnego pliku ani katalogu bez mojej wyraźnej, jednoznacznej zgody.** Dotyczy to w szczególności:
+- Plików konfiguracyjnych `.secrets`, `.ai-scan-session`, `.gitignore`, `opencode.json`
+- Skryptów, kodu źródłowego, dokumentacji
+- Plików tymczasowych, logów, cache
+- Plików w `output/` i `discord-bot/`
+
+Zanim wykonasz operację usunięcia, przeniesienia lub modyfikacji — ZAPYTAJ i czekaj na odpowiedź. Nawet jeśli wynika to z kontekstu rozmowy.
+
 ## Zasady komunikacji
 
 - Mówimy po polsku, identyfikatory w kodzie po angielsku.
