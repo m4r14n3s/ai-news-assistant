@@ -46,7 +46,7 @@ else
 fi
 
 opencode run "${SESSION_ARGS[@]}" --agent build --model opencode/deepseek-v4-flash-free --dir "$PROJECT_DIR" \
-  "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
+  "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: frontmatter MUSI zawierać tags: [ai, agents, sap, daily] oraz date. każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
 - **[Nazwa frameworku](url)** - news/zmiana (1-2 zdania po polsku, czysty język biznesowy)
