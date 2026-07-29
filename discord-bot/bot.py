@@ -66,7 +66,7 @@ async def fresh(interaction: discord.Interaction):
             ["bash", SCAN_SCRIPT, "--force"],
             capture_output=True,
             text=True,
-            timeout=300,
+            timeout=600,
             env={**__import__("os").environ, "FRESH_SESSION": "true"},
         )
         embed = discord.Embed(
@@ -94,7 +94,15 @@ async def last(interaction: discord.Interaction):
     if not files:
         await interaction.response.send_message("Brak podsumowań.", ephemeral=True)
         return
-    content = files[0].read_text(encoding="utf-8")
+    # Skip incomplete files (< 100 bytes = urwany skan)
+    content = ""
+    for f in files:
+        if f.stat().st_size > 100:
+            content = f.read_text(encoding="utf-8")
+            break
+    if not content:
+        await interaction.response.send_message("Brak podsumowań.", ephemeral=True)
+        return
 
     await interaction.response.defer()
 
