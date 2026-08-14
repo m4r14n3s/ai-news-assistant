@@ -55,11 +55,16 @@ Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
 
 Sekcja SAP AI opieraj wyłącznie na oficjalnych źródłach SAP: community.sap.com, news.sap.com, sap.com, pages.community.sap.com, SAP Discovery Center, SAP BTP blogi, oficjalne dokumentacje SAP AI Core / AI Launchpad / Generative AI Hub. Żadnych third-party blogów czy portali w sekcji SAP AI. Opisy w czystej polszczyźnie biznesowej - nazwy produktów SAP po angielsku, reszta po polsku.
 
+Sekcja Open Source / GitHub trending (obowiązkowa — przeszukaj GitHub Trending w kategoriach AI, ML, agents, LLM, MCP, developer tools — max 5 repo):
+- **[nazwa/repo](url-github)** (★ X.Xk) — co robi, jedno zdanie biznesowego "dlaczego to może być ważne"
+  - **Opis:** czym jest repozytorium, do czego służy, wartość dla developerów/firm (1-2 zdania po polsku)
+  - **Źródło:** [GitHub - nazwa/repo](url-github)
+
 Sekcja Źródła na końcu: każda pozycja w formacie - [Tytuł](url) - krótki opis źródła (czego dotyczy). NIE używaj tabel. Żadnych [Link] ani | # | Źródło | URL |. Zapisz jako output/${FILENAME}. Użyj websearch.
 
 Dodatkowe źródła do sprawdzenia (oprócz websearch):
 - Twitter/X: @OpenAI, @AnthropicAI, @GoogleDeepMind, @kaborojevic, @sama
-- GitHub Trending dla "AI agents", "MCP", "agentic AI"
+- GitHub Trending (github.com/trending) — szukaj w kategoriach: AI, ML, agents, LLM tools, MCP, developer tools. Dla każdego repo pobierz: nazwa, opis, liczbę gwiazdek, link
 - Hacker News (news.ycombinator.com) dla AI-related postów
 - arXiv (arxiv.org/list/cs.AI/recent) dla nowych paperów
 - Oficjalne blogi: OpenAI, Anthropic, Google DeepMind, Meta AI"
