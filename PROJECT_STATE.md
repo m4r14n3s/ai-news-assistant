@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-08-14 18:32
+**Ostatnia aktualizacja:** 2026-08-16 13:05
 
 ---
 
@@ -19,6 +19,7 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Discord bot token | zapisany w `.secrets` |
 | Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
 | Discord bot PID | `11962` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| iCloud sync | ⚠️ Wymaga aktywnej sesji GUI na Mini. FileVault ON → **brak auto-login**. Po każdym resecie Mini zaloguj się raz przez Screen Sharing, aby `bird` wystartował i Obsidian zsynchronizował skany. |
 | SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `14:98:77:70:6c:6e` |
 | DHCP reservation | Router ASUS: MAC `14:98:77:70:6c:6e` → IP `192.168.1.139` (fizyczny MAC, Private WiFi Address OFF) |
 
@@ -131,6 +132,8 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-18** - Sesja 09:21. Dodane źródła do `daily-scan.sh`: Twitter/X (OpenAI, Anthropic, Google), GitHub Trending, HN, arXiv, blogi producentów. Bot padł, zrestartowany PID 25363. Synchronizacja plików po sesji.
 - **2026-07-29** - Sesja 18:56. Reguła 0 w AGENTS.md (NIGDY nie usuwać bez zgody). `/fresh` (nowa sesja), `/scan` (persistent). `/fresh` timeout 600s. `/last` pomija pliki <100B. Frontmatter wymuszone tags. Private WiFi Address OFF na stałe. Bot PID 51858.
 - **2026-08-14** - Sesja 18:32. Bot na Mini martwy od 2026-08-11 15:02 (padł po timeoutzie `/scan`, stacktrace w `bot.log`). Zrestartowany: PID 11962, połączony z Gateway. Bez launchd, restart tylko ręczny — open issue #5.
+- **2026-08-16** - Sesja 13:05. Diagnoza braku skanów w Obsidian: skany POWSTAJA (output/2026-08-16_11-59.md), ale iCloud Drive na Mini nie synchronizuje, bo Mini zrestartowany 13.08 bez zalogowania sesji GUI (loginwindow console, auto-login zablokowany przez FileVault ON, bird nie działa). Laptopowy vault kończy się na 2026-08-10. Usunięto `.ai-scan-session` (wskazywał na usuniętą sesję `ses_ff9e95...`). Decyzja: po resecie Mini loguj się raz przez Screen Sharing — iCloud wstaje sam.
+- **2026-08-16** - Sesja 13:10. Naprawa iCloud sync. Po zalogowaniu do GUI (Screen Sharing) bird wystartował. Zaległe skany (15, 16.08) skopiowane przez scp do laptopowego vault nie miały metadanych iCloud — rozwiązanie: `killall fileproviderd` na laptopie → pliki dostały flagę `compressed,dataless` (zarejestrowane w iCloud). Bot PID 11962 aktywny. Obsidian na laptopie + iPhone widzi skany.
 
 ## Znane problemy
 
@@ -141,3 +144,4 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 5. **Bot restart po resecie Mini** - brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
 6. **WiFi Mini niestabilne** - en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
 7. **Private Wi-Fi Address** - **wyłączone** na stałe. MAC `14:98:77:70:6c:6e`, DHCP reservation działa na `.139`.
+8. **iCloud sync wymaga sesji GUI** - po restarcie Mini bez zalogowania do GUI daemon `bird` nie działa i Obsidian nie synchronizuje. Auto-login zablokowany przez FileVault ON. **Rozwiązanie:** po każdym resecie Mini zaloguj się raz przez Screen Sharing (lub zostaw Mini zawsze zalogowany w GUI).
