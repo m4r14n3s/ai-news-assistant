@@ -45,7 +45,7 @@ else
   echo "Creating new session: AI Assistant Scan"
 fi
 
-opencode run "${SESSION_ARGS[@]}" --agent build --model opencode/deepseek-v4-flash-free --dir "$PROJECT_DIR" \
+opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash --dir "$PROJECT_DIR" \
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: frontmatter MUSI zawierać tags: [ai, agents, sap, daily] oraz date. każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
@@ -76,10 +76,11 @@ if [ ! -f "$SESSION_FILE" ]; then
 fi
 
 # Copy to iCloud Obsidian vault (iPhone sync)
-ICLOUD_VAULT="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/main/AI News"
-if [ -d "$ICLOUD_VAULT" ]; then
-  cp "$OUTPUT_DIR/$FILENAME" "$ICLOUD_VAULT/"
-  echo "Copied to iCloud Obsidian vault"
+# Copy to Obsidian drop (iCloud bridge via mna)
+DROP_VAULT="/Users/Shared/obsidian-drop/AI News"
+if [ -d "$DROP_VAULT" ]; then
+  cp "$OUTPUT_DIR/$FILENAME" "$DROP_VAULT/"
+  echo "Copied to Obsidian drop (iCloud bridge via mna)"
 fi
 
 echo ""
