@@ -45,7 +45,9 @@ else
   echo "Creating new session: AI Assistant Scan"
 fi
 
-opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash --dir "$PROJECT_DIR" \
+# Uwaga: opencode v2.x nie obsługuje już flagi --dir (cwd ustawiamy przez cd powyżej).
+# --auto: skan działa bezobsługowo, więc zatwierdzamy uprawnienia niejawnie odrzucone.
+opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash --auto \
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: frontmatter MUSI zawierać tags: [ai, agents, sap, daily] oraz date. każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):

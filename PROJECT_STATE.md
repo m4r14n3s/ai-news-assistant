@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-08-16 13:05
+**Ostatnia aktualizacja:** 2026-10-11 10:05
 
 ---
 
@@ -112,7 +112,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 ## Ostatni skan
 
-`output/2026-07-08_19-13.md` - poprawny, styl biznesowy (możliwy nowszy, bot był restartowany)
+`output/2026-10-11_09-55.md` - pełny skan (frameworki, SAP AI, nowości, Open Source, źródła). Uwaga: `websearch` niedostępny w środowisku (zwraca "Web search cancelled") - dane zebrane przez `webfetch`.
 
 ## Historia sesji
 
@@ -134,6 +134,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-08-14** - Sesja 18:32. Bot na Mini martwy od 2026-08-11 15:02 (padł po timeoutzie `/scan`, stacktrace w `bot.log`). Zrestartowany: PID 11962, połączony z Gateway. Bez launchd, restart tylko ręczny — open issue #5.
 - **2026-08-16** - Sesja 13:05. Diagnoza braku skanów w Obsidian: skany POWSTAJA (output/2026-08-16_11-59.md), ale iCloud Drive na Mini nie synchronizuje, bo Mini zrestartowany 13.08 bez zalogowania sesji GUI (loginwindow console, auto-login zablokowany przez FileVault ON, bird nie działa). Laptopowy vault kończy się na 2026-08-10. Usunięto `.ai-scan-session` (wskazywał na usuniętą sesję `ses_ff9e95...`). Decyzja: po resecie Mini loguj się raz przez Screen Sharing — iCloud wstaje sam.
 - **2026-08-16** - Sesja 13:10. Naprawa iCloud sync. Po zalogowaniu do GUI (Screen Sharing) bird wystartował. Zaległe skany (15, 16.08) skopiowane przez scp do laptopowego vault nie miały metadanych iCloud — rozwiązanie: `killall fileproviderd` na laptopie → pliki dostały flagę `compressed,dataless` (zarejestrowane w iCloud). Bot PID 11962 aktywny. Obsidian na laptopie + iPhone widzi skany.
+- **2026-10-11** - Sesja 09:30-10:05 (zgoda użytkownika na naprawę skryptu). **Naprawa `daily-scan.sh`:** opencode v2.0.26 nie obsługuje już flagi `--dir` (skrypt wypisywał usage i kończył bez skanu). Usunięto `--dir "$PROJECT_DIR"` (cwd ustawiany przez `cd`), dodano `--auto` dla pracy bezobsługowej. Model `opencode-go/deepseek-v4-flash` działa (błąd "Content Exists Risk" minął). Skrypt przetestowany pełnym przebiegiem - utworzył `output/2026-10-11_09-55.md` i `.ai-scan-session`. **Open issue:** `websearch` niedostępny w środowisku - skan działa przez `webfetch`.
 
 ## Znane problemy
 
