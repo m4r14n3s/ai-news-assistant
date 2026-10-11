@@ -112,9 +112,9 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 ## Ostatni skan
 
-`output/2026-09-05_18-30.md` - ostatni zachowany skan.
+Produkcja: Mac mini (konto `aiag`), codziennie 07:00, wynik trafia do Obsidian (iCloud vault). Ostatni potwierdzony skan produkcyjny: `2026-10-11_07-00.md` w vaultcie.
 
-Trzy skany testowe z 2026-10-11 (`09-29`, `09-55`, `10-17`) zostały usunięte na polecenie użytkownika jako artefakty testów naprawy pipeline'u. Kolejny skan utworzy nowy plik.
+Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2026-09-05_18-30.md`. Trzy skany testowe z 2026-10-11 (`09-29`, `09-55`, `10-17`) usunięte na polecenie użytkownika.
 
 ## Historia sesji
 
@@ -140,6 +140,8 @@ Trzy skany testowe z 2026-10-11 (`09-29`, `09-55`, `10-17`) zostały usunięte n
 - **Naprawa `websearch` (ten sam dzień).** Objaw: narzędzie `websearch` zwracało `Web search cancelled` przy każdym wywołaniu (`executed: false`). Przyczyna: domyślne `websearch.provider: "random"` trafiało na niedziałającego dostawcę (znany błąd opencode #54311 - brak fallbacku poza HTTP 429; pokrewne #47063, #50217, #51263). Endpoint Exa MCP (`https://mcp.exa.ai/mcp`) działa poprawnie i bez klucza. **Rozwiązanie:** w `opencode.json` ustawiono `"websearch": { "provider": "exa" }` oraz `permission.websearch: allow`. Weryfikacja: pełny przebieg skryptu zalogował 8x `Web Search via Exa`, exit=0, `=== Scan complete ===`, plik `output/2026-10-11_10-17.md` (plik usunięty później jako artefakt testowy).
 - **Naprawa zapisu sesji.** `opencode session list | grep | head -1 | awk` przy `set -o pipefail` kończyło skrypt SIGPIPE-em przed zapisem `.ai-scan-session` (każdy skan tworzył nową sesję zamiast wznawiać). Zamieniono `head -1` na `awk 'NR==1{print $1}'` + `|| true` i dodano kontrolę `-s`.
 - **Uwaga:** przy keyless Exa występuje sporadyczny HTTP 429 - skan radzi sobie, uzupełniając źródłami oficjalnymi.
+- **Skrypt odporny na wersje opencode.** Produkcja (Mac mini) używa innej wersji opencode niż host (host: 2.0.26 bez `--dir`, Mini: wg ENVIRONMENTS.md 1.18.18 z `--dir`). Dodano wykrywanie flag przez `opencode run --help`: `--dir` i `--auto` dokładane tylko, gdy są wspierane. Na hoście wykrywa `--auto`, na Mini dołoży `--dir`. Bez tego zmiana mogła zepsuć działający skan na Mini.
+- **Weryfikacja stanu produkcji:** w iCloud vault (Obsidian) są skany z **każdego dnia 5-11.10**, w tym `2026-10-11_07-00.md` - daily-scan na Mini **działa i synchronizuje**. Katalog `output/` na hoście to osobna, nieaktualizowana kopia deweloperska; brak plików w niej nie oznacza braku skanów.
 
 ## Znane problemy
 

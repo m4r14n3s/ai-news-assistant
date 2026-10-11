@@ -45,9 +45,20 @@ else
   echo "Creating new session: AI Assistant Scan"
 fi
 
-# Uwaga: opencode v2.x nie obsługuje już flagi --dir (cwd ustawiamy przez cd powyżej).
-# --auto: skan działa bezobsługowo, więc zatwierdzamy uprawnienia niejawnie odrzucone.
-opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash --auto \
+# opencode różni się między wersjami: 1.x używał --dir, 2.x ma --auto (i nie ma --dir).
+# Wykrywamy wspierane flagi, żeby ten sam skrypt działał i na Macu (2.x), i na Mini (1.x).
+# cwd i tak ustawiamy przez `cd` powyżej, więc brak --dir jest bezpieczny.
+OC_RUN_HELP="$(opencode run --help 2>&1 || true)"
+OC_EXTRA_FLAGS=""
+if printf '%s' "$OC_RUN_HELP" | grep -q -- '--dir'; then
+  OC_EXTRA_FLAGS="$OC_EXTRA_FLAGS --dir $PROJECT_DIR"
+fi
+if printf '%s' "$OC_RUN_HELP" | grep -q -- '--auto'; then
+  OC_EXTRA_FLAGS="$OC_EXTRA_FLAGS --auto"
+fi
+echo "opencode extra flags:${OC_EXTRA_FLAGS:- (brak)}"
+
+opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash $OC_EXTRA_FLAGS \
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: frontmatter MUSI zawierać tags: [ai, agents, sap, daily] oraz date. każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
