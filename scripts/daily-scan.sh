@@ -71,10 +71,16 @@ Dodatkowe źródła do sprawdzenia (oprócz websearch):
 - arXiv (arxiv.org/list/cs.AI/recent) dla nowych paperów
 - Oficjalne blogi: OpenAI, Anthropic, Google DeepMind, Meta AI"
 
-# Save session ID after first run for future resumes
+# Save session ID after first run for future resumes.
+# Uwaga: bez `head -1` - przy `set -o pipefail` wczesne zamknięcie potoku przez head
+# dawało SIGPIPE dla grep/opencode i kończyło skrypt przed zapisem pliku sesji.
 if [ ! -f "$SESSION_FILE" ]; then
-  opencode session list | grep "AI Assistant Scan" | head -1 | awk '{print $1}' > "$SESSION_FILE"
-  echo "Saved session ID to .ai-scan-session"
+  opencode session list 2>/dev/null | grep "AI Assistant Scan" | awk 'NR==1{print $1}' > "$SESSION_FILE" || true
+  if [ -s "$SESSION_FILE" ]; then
+    echo "Saved session ID to .ai-scan-session"
+  else
+    echo "UWAGA: nie udało się zapisać ID sesji (.ai-scan-session)" >&2
+  fi
 fi
 
 # Copy to iCloud Obsidian vault (iPhone sync)

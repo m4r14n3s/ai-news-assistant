@@ -1,5 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "websearch": "allow",
+    "webfetch": "allow"
+  },
+  "websearch": {
+    "provider": "exa"
+  },
   "provider": {
     "opencode": {
       "models": {
