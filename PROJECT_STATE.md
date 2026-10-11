@@ -112,7 +112,9 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 
 ## Ostatni skan
 
-`output/2026-10-11_09-55.md` - pełny skan (frameworki, SAP AI, nowości, Open Source, źródła). Uwaga: `websearch` niedostępny w środowisku (zwraca "Web search cancelled") - dane zebrane przez `webfetch`.
+`output/2026-09-05_18-30.md` - ostatni zachowany skan.
+
+Trzy skany testowe z 2026-10-11 (`09-29`, `09-55`, `10-17`) zostały usunięte na polecenie użytkownika jako artefakty testów naprawy pipeline'u. Kolejny skan utworzy nowy plik.
 
 ## Historia sesji
 
@@ -135,7 +137,7 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-08-16** - Sesja 13:05. Diagnoza braku skanów w Obsidian: skany POWSTAJA (output/2026-08-16_11-59.md), ale iCloud Drive na Mini nie synchronizuje, bo Mini zrestartowany 13.08 bez zalogowania sesji GUI (loginwindow console, auto-login zablokowany przez FileVault ON, bird nie działa). Laptopowy vault kończy się na 2026-08-10. Usunięto `.ai-scan-session` (wskazywał na usuniętą sesję `ses_ff9e95...`). Decyzja: po resecie Mini loguj się raz przez Screen Sharing — iCloud wstaje sam.
 - **2026-08-16** - Sesja 13:10. Naprawa iCloud sync. Po zalogowaniu do GUI (Screen Sharing) bird wystartował. Zaległe skany (15, 16.08) skopiowane przez scp do laptopowego vault nie miały metadanych iCloud — rozwiązanie: `killall fileproviderd` na laptopie → pliki dostały flagę `compressed,dataless` (zarejestrowane w iCloud). Bot PID 11962 aktywny. Obsidian na laptopie + iPhone widzi skany.
 - **2026-10-11** - Sesja 09:30-10:05 (zgoda użytkownika na naprawę skryptu). **Naprawa `daily-scan.sh`:** opencode v2.0.26 nie obsługuje już flagi `--dir` (skrypt wypisywał usage i kończył bez skanu). Usunięto `--dir "$PROJECT_DIR"` (cwd ustawiany przez `cd`), dodano `--auto` dla pracy bezobsługowej. Model `opencode-go/deepseek-v4-flash` działa (błąd "Content Exists Risk" minął). Skrypt przetestowany pełnym przebiegiem - utworzył `output/2026-10-11_09-55.md` i `.ai-scan-session`.
-- **Naprawa `websearch` (ten sam dzień).** Objaw: narzędzie `websearch` zwracało `Web search cancelled` przy każdym wywołaniu (`executed: false`). Przyczyna: domyślne `websearch.provider: "random"` trafiało na niedziałającego dostawcę (znany błąd opencode #54311 - brak fallbacku poza HTTP 429; pokrewne #47063, #50217, #51263). Endpoint Exa MCP (`https://mcp.exa.ai/mcp`) działa poprawnie i bez klucza. **Rozwiązanie:** w `opencode.json` ustawiono `"websearch": { "provider": "exa" }` oraz `permission.websearch: allow`. Weryfikacja: pełny przebieg skryptu zalogował 8x `Web Search via Exa`, exit=0, `=== Scan complete ===`, plik `output/2026-10-11_10-17.md`.
+- **Naprawa `websearch` (ten sam dzień).** Objaw: narzędzie `websearch` zwracało `Web search cancelled` przy każdym wywołaniu (`executed: false`). Przyczyna: domyślne `websearch.provider: "random"` trafiało na niedziałającego dostawcę (znany błąd opencode #54311 - brak fallbacku poza HTTP 429; pokrewne #47063, #50217, #51263). Endpoint Exa MCP (`https://mcp.exa.ai/mcp`) działa poprawnie i bez klucza. **Rozwiązanie:** w `opencode.json` ustawiono `"websearch": { "provider": "exa" }` oraz `permission.websearch: allow`. Weryfikacja: pełny przebieg skryptu zalogował 8x `Web Search via Exa`, exit=0, `=== Scan complete ===`, plik `output/2026-10-11_10-17.md` (plik usunięty później jako artefakt testowy).
 - **Naprawa zapisu sesji.** `opencode session list | grep | head -1 | awk` przy `set -o pipefail` kończyło skrypt SIGPIPE-em przed zapisem `.ai-scan-session` (każdy skan tworzył nową sesję zamiast wznawiać). Zamieniono `head -1` na `awk 'NR==1{print $1}'` + `|| true` i dodano kontrolę `-s`.
 - **Uwaga:** przy keyless Exa występuje sporadyczny HTTP 429 - skan radzi sobie, uzupełniając źródłami oficjalnymi.
 
