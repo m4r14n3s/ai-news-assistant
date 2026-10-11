@@ -142,6 +142,7 @@ Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2
 - **Uwaga:** przy keyless Exa występuje sporadyczny HTTP 429 - skan radzi sobie, uzupełniając źródłami oficjalnymi.
 - **Skrypt odporny na wersje opencode.** Produkcja (Mac mini) używa innej wersji opencode niż host (host: 2.0.26 bez `--dir`, Mini: wg ENVIRONMENTS.md 1.18.18 z `--dir`). Dodano wykrywanie flag przez `opencode run --help`: `--dir` i `--auto` dokładane tylko, gdy są wspierane. Na hoście wykrywa `--auto`, na Mini dołoży `--dir`. Bez tego zmiana mogła zepsuć działający skan na Mini.
 - **Weryfikacja stanu produkcji:** w iCloud vault (Obsidian) są skany z **każdego dnia 5-11.10**, w tym `2026-10-11_07-00.md` - daily-scan na Mini **działa i synchronizuje**. Katalog `output/` na hoście to osobna, nieaktualizowana kopia deweloperska; brak plików w niej nie oznacza braku skanów.
+- **Pull na Mini wykonany i zweryfikowany (2026-10-11):** `ssh-aiag` → `~/projects/ai-news-assistant`, HEAD `cbf1938`, working tree czysty. Mini ma opencode **1.18.34** (1.x), wykryte flagi `--dir --auto` (oba wspierane) - skrypt adaptacyjny poda oba. Test `opencode run --dir ... --auto` zwrócił `OK`, więc nowy klucz `websearch.provider` nie psuje konfiguracji na 1.x (jest ignorowany; V1 ma websearch natywnie). `.ai-scan-session` na Mini istnieje (z 26.08) - sesja wznawiana, zgodnie z decyzją użytkownika pozostawiona.
 
 ## Znane problemy
 
