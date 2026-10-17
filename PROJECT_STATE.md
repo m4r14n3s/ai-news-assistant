@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-10-17 22:05
+**Ostatnia aktualizacja:** 2026-10-17 22:20
 
 ---
 
@@ -74,6 +74,15 @@ Agent AI z własnym gatewayem (Telegram) i tool-callingiem. **Nie należy do teg
 | Logi | `~/projects/hermes/.hermes/logs/`: `gateway.log`, `gateway.err.log`, `errors.log`, `agent.log` |
 | Weryfikacja jednym strzałem | `export HERMES_HOME=/Users/aiag/projects/hermes/.hermes && .venv/bin/python -m hermes_cli.main -z "Reply with exactly: OK"` |
 | Restart | `hermes gateway restart` (uruchamiać w tle/bez blokującego SSH - patrz pułapka niżej) lub `sudo launchctl kickstart -k system/com.hermes.gateway` |
+
+**Zadania cron Hermesa (profil live - ticker wbudowany w gateway, `cron/ticker_heartbeat`):**
+
+| ID | Nazwa | Harmonogram | Ostatnie uruchomienie | Następne |
+|----|-------|-------------|----------------------|----------|
+| `43c875441bfa` | `borealis-scorpionfish-watch` (skill `product-price-monitor`) | `0 9 * * *` | 2026-10-17 09:02 ok | 2026-10-18 09:00 |
+| `2776d1c1f30c` | `ai-information-news` | co 43200 min (30 dni) | 2026-09-19 13:10 ok | 2026-10-19 13:10 |
+
+Historia uruchomień: `cron/executions.db` (kolumna `status`), wyniki: `cron/output/<job_id>/`.
 
 **Pułapki (potwierdzone 2026-10-17):**
 - CLI bez `export HERMES_HOME=...` działa na `~/.hermes`, czyli **nie na tym profilu, którego używa daemon** → mylące `auth status: logged out`, `cron list: brak zadań`, `auth reset: 0 credentials`.
@@ -183,6 +192,8 @@ Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2
 - **2026-10-17** - Sesja 21:15-21:40. Diagnoza braku skanów z 15/16/17.10: `scan.log` miał tylko nagłówki, `scan.err` kończył się 3× `UnknownError: Unexpected server error` (`err_bd55702f`, `err_96411cf5`, `err_d1c0aeea`), w bazie ostatnia wiadomość `assistant` z 14.10 21:29, a wiadomości `user` z każdego 07:00 bez odpowiedzi. Przyczyny (potwierdzone reprodukcją na Mini): (a) `opencode-go/deepseek-v4-flash` wycofany z katalogu providera, (b) wygasły klucz API `opencode-go`. Naprawa: nowy klucz wstawiony przez użytkownika (`opencode auth list` → `OpenCode Go · api`; test `deepseek-v4.1-flash` → `OK`, `websearch` działa), model zaktualizowany w `daily-scan.sh` i `opencode.json` (commit `382e173`, pull na Mini), sesja scanu odświeżona (`FRESH_SESSION=true`), 6 jednorazowych sesji diagnostycznych usuniętych przez `opencode session delete`. Weryfikacja end-to-end: `output/2026-10-17_21-35.md` (25,7 kB, 156 linii, `EXIT=0`), bridge `mna` przeniósł plik do vaultu o 21:38, plik widoczny w vaultcie na laptopie. Bot: launchd PID 591, gateway wznawia sesje; WiFi nadal gubi połączenie (watchdog restartował 13/14/17.10).
 - **2026-10-17** - Obserwacja do ewentualnej korekty promptu (bez wpływu na działanie): nowa notatka ma nagłówek `# Daily AI Scan - 17 października 2026 (21:35)` (data słownie) zamiast `# Daily AI Scan - 2026-10-17`, a frontmatter kolejność `title, date, source, tags` - wymagane pola (`date`, `source`, `tags: [ai, agents, sap, daily]`) są obecne.
 - **2026-10-17** - Sesja 21:45-22:00. **Hermes (drugi agent na Mini) miał tę samą przyczynę awarii**: proces żywy (launchd `com.hermes.gateway`, PID 587, `runs=1`, never exited), Telegram polling zdrowy, ale każde wywołanie LLM zwracało `401 api_key_expired` (pierwsze o 20:52:02, 9 wystąpień, 3× `Transient agent failure`). Hermes używa własnej kopii klucza: `OPENCODE_GO_API_KEY` w `~/projects/hermes/.hermes/.env` (67 znaków, fingerprint `3ce4e23043a4`) vs nowy klucz w `~/.local/share/opencode/auth.json` (51 znaków, `7f3c662317e6`). Naprawa: podmiana `OPENCODE_GO_API_KEY` w `.env` (odczyt z lokalnego `auth.json`, klucz nigdy nie wypisany - weryfikacja po fingerprintcie), backup `.env.bak-20261017_214650` (zawiera tylko wygasły klucz), `config.yaml`: `model.default` `deepseek-v4-flash` → `deepseek-v4.1-flash` (backup `config.yaml.bak-20261017_214715`), `hermes auth reset opencode-go` (wyczyszczenie `last_status: exhausted` / `last_error_code: 401`), restart gateway. Weryfikacja: `hermes -z "Reply with exactly: OK"` → `OK`; na Telegramie odpowiedzi 1818 i 315 znaków (`api_calls=1`, 0× 401). Skan wycieku: nowy klucz wyłącznie w `.env` (0 trafień w logach, `state.db` 57 MB, cache i packach repo). Sprzątnięte: proces-sierota po `hermes gateway restart` (double-run) - został jeden proces pod `KeepAlive` (PID 12734, trzyma `gateway.lock` + lock Telegrama).
+
+- **2026-10-17** - Sesja 22:05-22:20. **Sprzątanie po naprawach** (zgoda użytkownika): usunięte `hermes/.hermes/.env.bak-20261017_214650` (pełny duplikat sekretów + wygasły klucz; `shasum` potwierdził różnicę względem żywego `.env`), usunięta testowa sesja Hermesa `20261017_214841_0eb424` (`Reply with exactly: OK`) przez `hermes sessions delete --yes`, wcześniej 6 sesji diagnostycznych opencode. Zostawione świadomie: `config.yaml.bak-20261017_214715` (rollback bez sekretów), profil `~/.hermes` (skills 3,4 MB, `price-watches`, `SOUL.md`), katalog `cron/output/e05d833f8654` (raport z 2026-08-20 po zadaniu, którego już nie ma - 4 KB, do decyzji użytkownika). Kontrola po sprzątaniu: 1 proces gatewaya (PID 12734, launchd), ticker crona żywy (`ticker_heartbeat` 21:56), Hermes cron `borealis-scorpionfish-watch` 17.10 09:02 `ok`, `ai-information-news` ostatnio 19.09 `ok` i następny przebieg 19.10 13:10.
 
 ## Znane problemy
 
