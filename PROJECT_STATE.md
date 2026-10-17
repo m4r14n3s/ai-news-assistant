@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-10-11 10:05
+**Ostatnia aktualizacja:** 2026-10-17 21:45
 
 ---
 
@@ -18,7 +18,9 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Discord webhook | zapisany w `.secrets` |
 | Discord bot token | zapisany w `.secrets` |
 | Discord bot host | **Mac Mini** (`mna@192.168.1.139`, `~/projects/ai-news-assistant`) |
-| Discord bot PID | `11962` (Mini); start: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"` |
+| Discord bot | launchd `com.ainewsassistant.bot` (system domain, `KeepAlive=true`, konto `aiag`); PID `591`, uptime od 2026-10-06 |
+| Scan automation | launchd `com.ainewsassistant.dailyscan` (system domain, konto `aiag`), codziennie 07:00 |
+| Model scanu | `opencode-go/deepseek-v4.1-flash` (od 2026-10-17; poprzednie `deepseek-v4-flash` wycofane z katalogu providera) |
 | iCloud sync | ⚠️ Wymaga aktywnej sesji GUI na Mini. FileVault ON → **brak auto-login**. Po każdym resecie Mini zaloguj się raz przez Screen Sharing, aby `bird` wystartował i Obsidian zsynchronizował skany. |
 | SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `14:98:77:70:6c:6e` |
 | DHCP reservation | Router ASUS: MAC `14:98:77:70:6c:6e` → IP `192.168.1.139` (fizyczny MAC, Private WiFi Address OFF) |
@@ -46,7 +48,11 @@ python3 scripts/python-scan.py
 
 ### Automatyzacja (launchd)
 
-Wstrzymana - macOS blokuje launchd dostęp do `/Volumes/DevWork/` (dysk zewnętrzny). Gdy będzie potrzebna:
+**Produkcja (Mac mini): działa.** Dwa daemony systemowe w `/Library/LaunchDaemons/` (instalacja: `~/scripts/setup-aiag-daemons.sh` na Mini):
+- `com.ainewsassistant.dailyscan` - `scripts/daily-scan.sh`, codziennie 07:00, konto `aiag`, logi `output/scan.log` / `output/scan.err`
+- `com.ainewsassistant.bot` - `scripts/start-bot.sh`, `KeepAlive=true`, konto `aiag`, logi `output/bot.out.log` / `output/bot.err.log`
+
+**Host (MacBook): wstrzymane** - macOS blokuje launchd dostęp do `/Volumes/DevWork/` (dysk zewnętrzny). Gdy będzie potrzebne:
 1. `mv /Volumes/DevWork/projects/ai-news-assistant ~/Projects/`
 2. `bash ~/Projects/ai-news-assistant/scripts/install-services.sh`
 
@@ -109,10 +115,14 @@ WAŻNE: ka.żda pozycja ma klikalny link `[tekst](url)`. Źródła jako lista, N
 - **2026-07-08** - Prompt `daily-scan.sh` zmieniony na biznesowy styl opisów (czysta polszczyzna, nazwy produktów po angielsku, brak mieszania języków, focus na wartość biznesową). DHCP reservation na routerze ASUS. Stałe IP dla Mini: `192.168.1.139`.
 - **2026-07-11** - Sesja 23:00. Private Wi-Fi Address wyłączony (MAC `14:98:77:70:6c:6e`). DHCP reservation działa (`.139`). Bot PID 1564, uptime 5 dni. Ostatni commit: `7a54f48`.
 - **2026-07-18** - Dodane źródła do `daily-scan.sh`: Twitter/X, GitHub Trending, HN, arXiv, blogi OpenAI/Anthropic/Google. Bot zrestartowany PID 25363 po zdechnięciu.
+- **2026-10-17** - Rotacja klucza API providera `opencode-go` na Mini (poprzedni wygasł; `~/.local/share/opencode/auth.json` pochodził z 23.08). Model scanu podniesiony z wycofanego `opencode-go/deepseek-v4-flash` na `opencode-go/deepseek-v4.1-flash` (`scripts/daily-scan.sh`), w `opencode.json` `deepseek-v4-flash-free` → `deepseek-v4.1-flash-free`. Commit `382e173` + `git pull --ff-only` na Mini (HEAD `382e173`).
+- **2026-10-17** - Świeża sesja scanu: `.ai-scan-session` → `ses_eb4a36c6cffe7XUAySI5JJeRb0`. Poprzednia sesja `ses_fc36c33fcffekp5Vhz528xknKm` (404 wiadomości, 37,7 mln tokenów wejściowych narastająco) pozostaje w bazie `~/.local/share/opencode/opencode.db` jako archiwum i nie jest już wznawiana.
 
 ## Ostatni skan
 
-Produkcja: Mac mini (konto `aiag`), codziennie 07:00, wynik trafia do Obsidian (iCloud vault). Ostatni potwierdzony skan produkcyjny: `2026-10-11_07-00.md` w vaultcie.
+Produkcja: Mac mini (konto `aiag`), codziennie 07:00, wynik trafia do Obsidian (iCloud vault). Skany działały do **2026-10-14** (ostatni `2026-10-14_21-28.md`). **Luka 2026-10-15/16/17** (07:00) - wycofany model `deepseek-v4-flash` i wygasły klucz `opencode-go`; decyzja użytkownika: bez backfillu, powrót do rytmu od 2026-10-18.
+
+Ostatni skan: `2026-10-17_21-35.md` - przebieg weryfikacyjny po naprawie, `EXIT=0`, 25,7 kB / 156 linii, obecny w vaultcie na Mini (`mna`) i na laptopie (iCloud).
 
 Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2026-09-05_18-30.md`. Trzy skany testowe z 2026-10-11 (`09-29`, `09-55`, `10-17`) usunięte na polecenie użytkownika.
 
@@ -143,14 +153,16 @@ Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2
 - **Skrypt odporny na wersje opencode.** Produkcja (Mac mini) używa innej wersji opencode niż host (host: 2.0.26 bez `--dir`, Mini: wg ENVIRONMENTS.md 1.18.18 z `--dir`). Dodano wykrywanie flag przez `opencode run --help`: `--dir` i `--auto` dokładane tylko, gdy są wspierane. Na hoście wykrywa `--auto`, na Mini dołoży `--dir`. Bez tego zmiana mogła zepsuć działający skan na Mini.
 - **Weryfikacja stanu produkcji:** w iCloud vault (Obsidian) są skany z **każdego dnia 5-11.10**, w tym `2026-10-11_07-00.md` - daily-scan na Mini **działa i synchronizuje**. Katalog `output/` na hoście to osobna, nieaktualizowana kopia deweloperska; brak plików w niej nie oznacza braku skanów.
 - **Pull na Mini wykonany i zweryfikowany (2026-10-11):** `ssh-aiag` → `~/projects/ai-news-assistant`, HEAD `cbf1938`, working tree czysty. Mini ma opencode **1.18.34** (1.x), wykryte flagi `--dir --auto` (oba wspierane) - skrypt adaptacyjny poda oba. Test `opencode run --dir ... --auto` zwrócił `OK`, więc nowy klucz `websearch.provider` nie psuje konfiguracji na 1.x (jest ignorowany; V1 ma websearch natywnie). `.ai-scan-session` na Mini istnieje (z 26.08) - sesja wznawiana, zgodnie z decyzją użytkownika pozostawiona.
+- **2026-10-17** - Sesja 21:15-21:40. Diagnoza braku skanów z 15/16/17.10: `scan.log` miał tylko nagłówki, `scan.err` kończył się 3× `UnknownError: Unexpected server error` (`err_bd55702f`, `err_96411cf5`, `err_d1c0aeea`), w bazie ostatnia wiadomość `assistant` z 14.10 21:29, a wiadomości `user` z każdego 07:00 bez odpowiedzi. Przyczyny (potwierdzone reprodukcją na Mini): (a) `opencode-go/deepseek-v4-flash` wycofany z katalogu providera, (b) wygasły klucz API `opencode-go`. Naprawa: nowy klucz wstawiony przez użytkownika (`opencode auth list` → `OpenCode Go · api`; test `deepseek-v4.1-flash` → `OK`, `websearch` działa), model zaktualizowany w `daily-scan.sh` i `opencode.json` (commit `382e173`, pull na Mini), sesja scanu odświeżona (`FRESH_SESSION=true`), 6 jednorazowych sesji diagnostycznych usuniętych przez `opencode session delete`. Weryfikacja end-to-end: `output/2026-10-17_21-35.md` (25,7 kB, 156 linii, `EXIT=0`), bridge `mna` przeniósł plik do vaultu o 21:38, plik widoczny w vaultcie na laptopie. Bot: launchd PID 591, gateway wznawia sesje; WiFi nadal gubi połączenie (watchdog restartował 13/14/17.10).
+- **2026-10-17** - Obserwacja do ewentualnej korekty promptu (bez wpływu na działanie): nowa notatka ma nagłówek `# Daily AI Scan - 17 października 2026 (21:35)` (data słownie) zamiast `# Daily AI Scan - 2026-10-17`, a frontmatter kolejność `title, date, source, tags` - wymagane pola (`date`, `source`, `tags: [ai, agents, sap, daily]`) są obecne.
 
 ## Znane problemy
 
-1. **launchd × dysk zewnętrzny** - macOS blokuje launchd dostęp do `/Volumes/DevWork/`. Rozwiązanie: przenieść na `~/Projects/`
+1. **launchd × dysk zewnętrzny (host)** - macOS blokuje launchd dostęp do `/Volumes/DevWork/`. Nie dotyczy Mini (repo w `~/projects/`, daemony w `/Library/LaunchDaemons/`). Rozwiązanie dla hosta: przenieść na `~/Projects/`
 2. **DuckDuckGo API** - nie zwraca wyników. Python fallback wymaga alternatywnego API. Główny flow używa opencode websearch - działa.
 3. **Discord embed limit** - notatki >4096 znaków dzielone na 2 embedy. Nie do ominięcia (limit Discord API).
 4. **Mini sleep → bot disconnect** - przy uśpieniu Mini bot traci sesję Gateway. `pmset -a sleep 0` powinno zapobiegać, ale wymaga monitorowania.
-5. **Bot restart po resecie Mini** - brak launchd. Ręcznie: `ssh mna@192.168.1.139 "cd ~/projects/ai-news-assistant && nohup bash scripts/start-bot.sh &"`
+5. ~~Bot restart po resecie Mini~~ - **rozwiązane** (2026-09-11, potwierdzone 2026-10-17): launchd `com.ainewsassistant.bot` z `KeepAlive=true` podnosi bota automatycznie (PID 591, uptime 11 dni, konto `aiag`).
 6. **WiFi Mini niestabilne** - en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
 7. **Private Wi-Fi Address** - **wyłączone** na stałe. MAC `14:98:77:70:6c:6e`, DHCP reservation działa na `.139`.
 8. **iCloud sync wymaga sesji GUI** - po restarcie Mini bez zalogowania do GUI daemon `bird` nie działa i Obsidian nie synchronizuje. Auto-login zablokowany przez FileVault ON. **Rozwiązanie:** po każdym resecie Mini zaloguj się raz przez Screen Sharing (lub zostaw Mini zawsze zalogowany w GUI).
