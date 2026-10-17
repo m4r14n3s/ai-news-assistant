@@ -1,6 +1,6 @@
 # PROJECT STATE - AI News Assistant
 
-**Ostatnia aktualizacja:** 2026-10-17 21:45
+**Ostatnia aktualizacja:** 2026-10-17 22:05
 
 ---
 
@@ -21,6 +21,8 @@ Gdy wracasz/otwierasz nową sesję w tym projekcie, przeczytaj ten plik jako pie
 | Discord bot | launchd `com.ainewsassistant.bot` (system domain, `KeepAlive=true`, konto `aiag`); PID `591`, uptime od 2026-10-06 |
 | Scan automation | launchd `com.ainewsassistant.dailyscan` (system domain, konto `aiag`), codziennie 07:00 |
 | Model scanu | `opencode-go/deepseek-v4.1-flash` (od 2026-10-17; poprzednie `deepseek-v4-flash` wycofane z katalogu providera) |
+| Hermes (drugi agent) | launchd `com.hermes.gateway` (system domain, konto `aiag`); `HERMES_HOME=/Users/aiag/projects/hermes/.hermes` |
+| Klucz `opencode-go` | dwóch konsumentów na Mini: opencode CLI (`~/.local/share/opencode/auth.json`) i Hermes (`hermes/.hermes/.env` → `OPENCODE_GO_API_KEY`). Rotacja = oba miejsca! |
 | iCloud sync | ⚠️ Wymaga aktywnej sesji GUI na Mini. FileVault ON → **brak auto-login**. Po każdym resecie Mini zaloguj się raz przez Screen Sharing, aby `bird` wystartował i Obsidian zsynchronizował skany. |
 | SSH | `ssh mna@192.168.1.139` (key auth, bez hasła); WoL: magic packet na MAC `14:98:77:70:6c:6e` |
 | DHCP reservation | Router ASUS: MAC `14:98:77:70:6c:6e` → IP `192.168.1.139` (fizyczny MAC, Private WiFi Address OFF) |
@@ -58,6 +60,30 @@ python3 scripts/python-scan.py
 
 ---
 
+## Hermes (drugi agent na Mac mini)
+
+Agent AI z własnym gatewayem (Telegram) i tool-callingiem. **Nie należy do tego repo** - kod w `~/projects/hermes`, konfiguracja w `~/projects/hermes/.hermes`.
+
+| Element | Wartość |
+|---------|---------|
+| launchd | `com.hermes.gateway` (`/Library/LaunchDaemons/`, system domain, `KeepAlive=true`, `RunAtLoad=true`, konto `aiag`) |
+| `HERMES_HOME` | `/Users/aiag/projects/hermes/.hermes` (z plist; **nie** `~/.hermes` - to inny, poboczny profil) |
+| Uruchomienie | `python -m hermes_cli.main gateway run` z venv `~/projects/hermes/.venv` |
+| Provider / model | `opencode-go` (`base_url https://opencode.ai/zen/go/v1`), `config.yaml` → `model.default: deepseek-v4.1-flash` |
+| Credential | `OPENCODE_GO_API_KEY` w `~/projects/hermes/.hermes/.env` (pool: `auth.json` → `credential_pool.opencode-go`, `source: env:OPENCODE_GO_API_KEY`) |
+| Logi | `~/projects/hermes/.hermes/logs/`: `gateway.log`, `gateway.err.log`, `errors.log`, `agent.log` |
+| Weryfikacja jednym strzałem | `export HERMES_HOME=/Users/aiag/projects/hermes/.hermes && .venv/bin/python -m hermes_cli.main -z "Reply with exactly: OK"` |
+| Restart | `hermes gateway restart` (uruchamiać w tle/bez blokującego SSH - patrz pułapka niżej) lub `sudo launchctl kickstart -k system/com.hermes.gateway` |
+
+**Pułapki (potwierdzone 2026-10-17):**
+- CLI bez `export HERMES_HOME=...` działa na `~/.hermes`, czyli **nie na tym profilu, którego używa daemon** → mylące `auth status: logged out`, `cron list: brak zadań`, `auth reset: 0 credentials`.
+- `hermes gateway restart` podpięty do sesji SSH potrafi zostawić proces-sierotę (double-run) obok instancji z launchd - po restarcie sprawdzić, że istnieje **dokładnie jeden** proces i że trzyma `gateway.lock` + lock Telegrama (`~/.local/state/hermes/gateway-locks/`).
+- Rotacja klucza `opencode-go` w OpenCode Console unieważnia poprzedni klucz - trzeba go podmienić w **obu** konsumentach (opencode CLI i Hermes), inaczej jeden z agentów zwraca `401 api_key_expired` przy zachowaniu „żywego” procesu.
+- Flapy WiFi (en1) generują w logach Hermesa dziesiątki–setki `nodename nor servname` / `ReadError` dziennie; adapter Telegrama wznawia polling sam, to nie jest awaria agenta.
+
+---
+
+
 ## Status komponentów
 
 | Obszar | Status | Opis |
@@ -75,7 +101,8 @@ python3 scripts/python-scan.py
 | Obsidian vault | ✅ Done | Symlink w iCloud vault |
 | Discord webhook | ✅ Done | Push podsumowań |
 | Discord bot token | ✅ Done (rotated 2026-06-16) | Interakcje z iPhone - stary token wyciekł do lokalnego gita, zresetowany |
-| launchd automatyzacja | ⏸️ Wstrzymana | Wymaga przeniesienia na dysk systemowy |
+| launchd automatyzacja | ✅ Done (Mini) | Bot + dailyscan w `/Library/LaunchDaemons/`; host - wstrzymane (`/Volumes/DevWork/`) |
+| Hermes (osobny projekt, `~/projects/hermes`) | ✅ Done | Agent AI + gateway Telegram, launchd `com.hermes.gateway`, konto `aiag`; osobna dokumentacja poza tym repo |
 
 ## Format notatki
 
@@ -155,6 +182,7 @@ Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2
 - **Pull na Mini wykonany i zweryfikowany (2026-10-11):** `ssh-aiag` → `~/projects/ai-news-assistant`, HEAD `cbf1938`, working tree czysty. Mini ma opencode **1.18.34** (1.x), wykryte flagi `--dir --auto` (oba wspierane) - skrypt adaptacyjny poda oba. Test `opencode run --dir ... --auto` zwrócił `OK`, więc nowy klucz `websearch.provider` nie psuje konfiguracji na 1.x (jest ignorowany; V1 ma websearch natywnie). `.ai-scan-session` na Mini istnieje (z 26.08) - sesja wznawiana, zgodnie z decyzją użytkownika pozostawiona.
 - **2026-10-17** - Sesja 21:15-21:40. Diagnoza braku skanów z 15/16/17.10: `scan.log` miał tylko nagłówki, `scan.err` kończył się 3× `UnknownError: Unexpected server error` (`err_bd55702f`, `err_96411cf5`, `err_d1c0aeea`), w bazie ostatnia wiadomość `assistant` z 14.10 21:29, a wiadomości `user` z każdego 07:00 bez odpowiedzi. Przyczyny (potwierdzone reprodukcją na Mini): (a) `opencode-go/deepseek-v4-flash` wycofany z katalogu providera, (b) wygasły klucz API `opencode-go`. Naprawa: nowy klucz wstawiony przez użytkownika (`opencode auth list` → `OpenCode Go · api`; test `deepseek-v4.1-flash` → `OK`, `websearch` działa), model zaktualizowany w `daily-scan.sh` i `opencode.json` (commit `382e173`, pull na Mini), sesja scanu odświeżona (`FRESH_SESSION=true`), 6 jednorazowych sesji diagnostycznych usuniętych przez `opencode session delete`. Weryfikacja end-to-end: `output/2026-10-17_21-35.md` (25,7 kB, 156 linii, `EXIT=0`), bridge `mna` przeniósł plik do vaultu o 21:38, plik widoczny w vaultcie na laptopie. Bot: launchd PID 591, gateway wznawia sesje; WiFi nadal gubi połączenie (watchdog restartował 13/14/17.10).
 - **2026-10-17** - Obserwacja do ewentualnej korekty promptu (bez wpływu na działanie): nowa notatka ma nagłówek `# Daily AI Scan - 17 października 2026 (21:35)` (data słownie) zamiast `# Daily AI Scan - 2026-10-17`, a frontmatter kolejność `title, date, source, tags` - wymagane pola (`date`, `source`, `tags: [ai, agents, sap, daily]`) są obecne.
+- **2026-10-17** - Sesja 21:45-22:00. **Hermes (drugi agent na Mini) miał tę samą przyczynę awarii**: proces żywy (launchd `com.hermes.gateway`, PID 587, `runs=1`, never exited), Telegram polling zdrowy, ale każde wywołanie LLM zwracało `401 api_key_expired` (pierwsze o 20:52:02, 9 wystąpień, 3× `Transient agent failure`). Hermes używa własnej kopii klucza: `OPENCODE_GO_API_KEY` w `~/projects/hermes/.hermes/.env` (67 znaków, fingerprint `3ce4e23043a4`) vs nowy klucz w `~/.local/share/opencode/auth.json` (51 znaków, `7f3c662317e6`). Naprawa: podmiana `OPENCODE_GO_API_KEY` w `.env` (odczyt z lokalnego `auth.json`, klucz nigdy nie wypisany - weryfikacja po fingerprintcie), backup `.env.bak-20261017_214650` (zawiera tylko wygasły klucz), `config.yaml`: `model.default` `deepseek-v4-flash` → `deepseek-v4.1-flash` (backup `config.yaml.bak-20261017_214715`), `hermes auth reset opencode-go` (wyczyszczenie `last_status: exhausted` / `last_error_code: 401`), restart gateway. Weryfikacja: `hermes -z "Reply with exactly: OK"` → `OK`; na Telegramie odpowiedzi 1818 i 315 znaków (`api_calls=1`, 0× 401). Skan wycieku: nowy klucz wyłącznie w `.env` (0 trafień w logach, `state.db` 57 MB, cache i packach repo). Sprzątnięte: proces-sierota po `hermes gateway restart` (double-run) - został jeden proces pod `KeepAlive` (PID 12734, trzyma `gateway.lock` + lock Telegrama).
 
 ## Znane problemy
 
@@ -166,3 +194,4 @@ Lokalny `output/` (host) to kopia deweloperska: ostatni zachowany plik `output/2
 6. **WiFi Mini niestabilne** - en1 cyklicznie gubi połączenie. Watchdog: cron co minutę pinguje router, restartuje WiFi i bota w razie problemu. Skrypt: `scripts/wifi-watchdog.sh`
 7. **Private Wi-Fi Address** - **wyłączone** na stałe. MAC `14:98:77:70:6c:6e`, DHCP reservation działa na `.139`.
 8. **iCloud sync wymaga sesji GUI** - po restarcie Mini bez zalogowania do GUI daemon `bird` nie działa i Obsidian nie synchronizuje. Auto-login zablokowany przez FileVault ON. **Rozwiązanie:** po każdym resecie Mini zaloguj się raz przez Screen Sharing (lub zostaw Mini zawsze zalogowany w GUI).
+9. **Klucz `opencode-go` ma dwóch konsumentów na Mini** - opencode CLI (`~/.local/share/opencode/auth.json`) i Hermes (`~/projects/hermes/.hermes/.env`, `OPENCODE_GO_API_KEY`). Rotacja klucza w OpenCode Console unieważnia poprzedni, więc trzeba go podmienić w **obu** miejscach. Objaw przy pominięciu: `401 api_key_expired` przy „zdrowym” procesie i braku błędów startowych (Hermes odpowiedział na Telegramie komunikatem błędu, nie treścią). Szczegóły i procedura: sekcja „Hermes (drugi agent na Mac mini)”.
