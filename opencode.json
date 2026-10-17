@@ -10,7 +10,7 @@
   "provider": {
     "opencode": {
       "models": {
-        "deepseek-v4-flash-free": {
+        "deepseek-v4.1-flash-free": {
           "priority": 1
         }
       }

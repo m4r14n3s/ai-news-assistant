@@ -58,7 +58,7 @@ if printf '%s' "$OC_RUN_HELP" | grep -q -- '--auto'; then
 fi
 echo "opencode extra flags:${OC_EXTRA_FLAGS:- (brak)}"
 
-opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4-flash $OC_EXTRA_FLAGS \
+opencode run "${SESSION_ARGS[@]}" --agent build --model opencode-go/deepseek-v4.1-flash $OC_EXTRA_FLAGS \
   "${FRESH_FLAG}Wykonaj daily scan: przeszukaj internet w poszukiwaniu AI news (AI agents, MCP, LangGraph etc.). Wygeneruj podsumowanie w formacie Obsidian z frontmatter. WAŻNE: frontmatter MUSI zawierać tags: [ai, agents, sap, daily] oraz date. każda pozycja MUSI mieć klikalny link [tekst](url) do źródła. Repozytoria GitHub z linkiem.
 
 Format sekcji Frameworki i narzędzia agentowe (dla KAŻDEJ pozycji):
